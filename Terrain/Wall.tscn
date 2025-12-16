@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=3 uid="uid://dd8vmp811q5j8"]
+
+[ext_resource type="Script" uid="uid://dax0x7x07yivy" path="res://Terrain/Wall.gd" id="1_1txf0"]
+
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_1txf0"]
+
+[node name="Wall" type="StaticBody2D"]
+collision_mask = 15
+script = ExtResource("1_1txf0")
+
+[node name="LightOccluder2D" type="LightOccluder2D" parent="."]
+occluder = SubResource("OccluderPolygon2D_1txf0")
+
+[node name="Area2D" type="Area2D" parent="."]
+collision_mask = 15
+input_pickable = false
+
+[node name="AreaCollision" type="CollisionPolygon2D" parent="Area2D"]
