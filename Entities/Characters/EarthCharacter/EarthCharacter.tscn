@@ -1,0 +1,68 @@
+[gd_scene load_steps=9 format=3 uid="uid://k3mslpvijhds"]
+
+[ext_resource type="Script" uid="uid://cckinmhmx0uvy" path="res://Entities/Characters/EarthCharacter/EarthCharacter.gd" id="1_oofe1"]
+[ext_resource type="Texture2D" uid="uid://dddmxxuasemfw" path="res://Entities/Characters/EarthCharacter/EarthSprite.png" id="2_symtk"]
+[ext_resource type="Script" uid="uid://dsopyue7txr2b" path="res://Entities/Components/HealthComponent.gd" id="3_0y17a"]
+[ext_resource type="Script" uid="uid://cmrwry3cgj18k" path="res://Entities/Components/GettingHitManagerComponent.gd" id="4_symtk"]
+[ext_resource type="Script" uid="uid://b5uttgqqjgqly" path="res://Entities/Components/HurtboxComponent.gd" id="5_h1xd8"]
+[ext_resource type="Texture2D" uid="uid://k14dny83uw7m" path="res://Entities/Characters/EarthCharacter/EarthIcon.png" id="6_h1xd8"]
+[ext_resource type="PackedScene" uid="uid://cg8sovak1nglu" path="res://Entities/Components/DetectionAreaComponent.tscn" id="7_h1xd8"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_3nsai"]
+radius = 60.133186
+
+[node name="EarthCharacter" type="CharacterBody2D"]
+light_mask = 7
+visibility_layer = 7
+collision_layer = 0
+collision_mask = 0
+motion_mode = 1
+script = ExtResource("1_oofe1")
+metadata/_custom_type_script = "uid://cckinmhmx0uvy"
+
+[node name="Sprite" type="Sprite2D" parent="."]
+z_index = 2
+scale = Vector2(8.14, 8.14)
+texture = ExtResource("2_symtk")
+
+[node name="HealthComponent" type="Node" parent="."]
+script = ExtResource("3_0y17a")
+metadata/_custom_type_script = "uid://dsopyue7txr2b"
+
+[node name="GettingHitManagerComponent" type="Node" parent="."]
+script = ExtResource("4_symtk")
+metadata/_custom_type_script = "uid://cmrwry3cgj18k"
+
+[node name="HurtboxComponent" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 0
+script = ExtResource("5_h1xd8")
+metadata/_custom_type_script = "uid://b5uttgqqjgqly"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HurtboxComponent"]
+shape = SubResource("CircleShape2D_3nsai")
+
+[node name="Icon" type="Sprite2D" parent="."]
+light_mask = 2
+visibility_layer = 2
+z_index = 1
+z_as_relative = false
+scale = Vector2(16.76, 16.76)
+texture = ExtResource("6_h1xd8")
+
+[node name="DetectionAreaComponent" parent="." instance=ExtResource("7_h1xd8")]
+range_item_cull_mask = 4
+shadow_item_cull_mask = 4
+texture_scale = 8.6953125
+diameter = 2226
+
+[node name="VisionCone2D" parent="DetectionAreaComponent" index="0"]
+max_distance = 1113.0
+
+[node name="VisionConeCollider" parent="DetectionAreaComponent/VisionCone2D/VisionConeArea" index="0"]
+polygon = PackedVector2Array(-9.730155e-05, -1113, 69.88578, -1110.8037, 139.49585, -1104.2236, 208.55539, -1093.2856, 276.79187, -1078.0331, 343.93594, -1058.5259, 409.7227, -1034.8412, 473.89246, -1007.07245, 536.19196, -975.3293, 596.3751, -939.73706, 654.2049, -900.436, 709.4528, -857.5813, 761.9009, -811.3421, 811.3421, -761.90094, 857.58124, -709.4529, 900.4359, -654.2049, 939.73706, -596.3752, 975.32935, -536.1918, 1007.07245, -473.89246, 1034.8412, -409.7226, 1058.5259, -343.93594, 1078.0331, -276.79187, 1093.2856, -208.5554, 1104.2236, -139.49585, 1110.8037, -69.88579, 1113, -4.8650774e-05, 1110.8037, 69.885826, 1104.2236, 139.4959, 1093.2856, 208.55544, 1078.0331, 276.7919, 1058.5259, 343.93588, 1034.8412, 409.72263, 1007.0725, 473.89236, 975.3293, 536.1919, 939.737, 596.3752, 900.4359, 654.20496, 857.58124, 709.4529, 811.3421, 761.90094, 761.90094, 811.3421, 709.4529, 857.58124, 654.20496, 900.4359, 596.37524, 939.737, 536.1919, 975.3293, 473.89233, 1007.0725, 409.72263, 1034.8412, 343.9359, 1058.5259, 276.79187, 1078.0331, 208.5554, 1093.2856, 139.4959, 1104.2236, 69.88585, 1110.8037, -4.942713e-13, 1113, -69.88585, 1110.8037, -139.4959, 1104.2236, -208.5554, 1093.2856, -276.79187, 1078.0331, -343.9359, 1058.5259, -409.72263, 1034.8412, -473.89233, 1007.0725, -536.1919, 975.3293, -596.37524, 939.737, -654.20496, 900.4359, -709.4529, 857.58124, -761.90094, 811.3421, -811.3421, 761.90094, -857.58124, 709.4529, -900.4359, 654.20496, -939.737, 596.3752, -975.3293, 536.1919, -1007.0725, 473.89236, -1034.8412, 409.72263, -1058.5259, 343.93588, -1078.0331, 276.7919, -1093.2856, 208.55544, -1104.2236, 139.4959, -1110.8037, 69.885826, -1113, -4.8650774e-05, -1110.8037, -69.88579, -1104.2236, -139.49585, -1093.2856, -208.5554, -1078.0331, -276.79187, -1058.5259, -343.93594, -1034.8412, -409.7226, -1007.07245, -473.89246, -975.32935, -536.1918, -939.73706, -596.3752, -900.4359, -654.2049, -857.58124, -709.4529, -811.3421, -761.90094, -761.9009, -811.3421, -709.4528, -857.5813, -654.2049, -900.436, -596.3751, -939.73706, -536.19196, -975.3293, -473.89246, -1007.07245, -409.7227, -1034.8412, -343.93594, -1058.5259, -276.79187, -1078.0331, -208.55539, -1093.2856, -139.49585, -1104.2236, -69.88578, -1110.8037, 9.730155e-05, -1113)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_3nsai")
+
+[editable path="DetectionAreaComponent"]

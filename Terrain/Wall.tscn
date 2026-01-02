@@ -3,13 +3,19 @@
 [ext_resource type="Script" uid="uid://dax0x7x07yivy" path="res://Terrain/Wall.gd" id="1_1txf0"]
 
 [sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_1txf0"]
+resource_local_to_scene = true
 
 [node name="Wall" type="StaticBody2D"]
+light_mask = 4
+visibility_layer = 4
 collision_mask = 15
 script = ExtResource("1_1txf0")
 
 [node name="LightOccluder2D" type="LightOccluder2D" parent="."]
+light_mask = 4
+visibility_layer = 4
 occluder = SubResource("OccluderPolygon2D_1txf0")
+occluder_light_mask = 4
 
 [node name="Area2D" type="Area2D" parent="."]
 collision_mask = 15

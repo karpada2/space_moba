@@ -16,20 +16,30 @@ config/icon="res://icon.svg"
 
 [autoload]
 
-DamageTypes="*res://Attacks/DamageTypes.gd"
+Enums="*res://Enums.gd"
+TurnResolutionManager="*res://Turns/TurnResolutionManager.gd"
 
 [debug]
 
 gdscript/warnings/untyped_declaration=2
 gdscript/warnings/inferred_declaration=1
 
+[global_group]
+
+Characters=""
+VisibleEntities=""
+
 [layer_names]
 
+2d_render/layer_1="Sprites"
+2d_render/layer_2="Icons"
+2d_render/layer_3="Terrain"
 2d_physics/layer_1="Terrain"
 2d_physics/layer_2="NeutralEntities"
-2d_physics/layer_3="Team1Entities"
-2d_physics/layer_4="Team2Entities"
+2d_physics/layer_3="GoodTeamEntities"
+2d_physics/layer_4="EvilTeamEntities"
 
 [rendering]
 
+textures/canvas_textures/default_texture_filter=0
 renderer/rendering_method="mobile"

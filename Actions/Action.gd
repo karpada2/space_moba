@@ -2,4 +2,4 @@
 extends Object
 class_name Action
 
-var move_length_frames: int
+var action_length_frames: int

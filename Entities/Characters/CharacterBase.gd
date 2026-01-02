@@ -1,3 +1,24 @@
 @abstract
 extends EntityBase
 class_name CharacterBase
+
+var detection_area: DetectionAreaComponent
+
+func _ready() -> void:
+	super()
+	for node: Node in self.get_children():
+		if node is DetectionAreaComponent:
+			detection_area = node
+	detection_area.my_team = self.my_team
+	hurtbox_component.revealed.connect(self.show)
+
+func unreveal() -> void:
+	self.hide()
+	detection_area.disable()
+
+func reveal_close_enemies() -> void:
+	self.show()
+	detection_area.enable()
+	for area: Area2D in detection_area.vision_cone_area.get_overlapping_areas():
+		if area is HurtboxComponent:
+			area.reveal()
