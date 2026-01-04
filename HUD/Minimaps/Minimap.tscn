@@ -1,0 +1,23 @@
+[gd_scene load_steps=3 format=3 uid="uid://woo7snprb2iw"]
+
+[ext_resource type="Script" uid="uid://dtd6pqcc4vcqg" path="res://HUD/Minimaps/Minimap.gd" id="1_fd6n6"]
+[ext_resource type="Texture2D" uid="uid://dc88ec5wny1rk" path="res://icon.svg" id="1_odjjw"]
+
+[node name="Minimap" type="TextureRect"]
+anchors_preset = -1
+anchor_right = 0.22200002
+anchor_bottom = 0.395
+offset_right = 0.25598145
+offset_bottom = 0.039993286
+texture = ExtResource("1_odjjw")
+expand_mode = 1
+script = ExtResource("1_fd6n6")
+my_team = 0
+
+[node name="Control" type="Control" parent="."]
+anchors_preset = 0
+offset_left = 10.2
+offset_top = 79.0
+offset_right = 50.2
+offset_bottom = 119.0
+pivot_offset = Vector2(20, 20)

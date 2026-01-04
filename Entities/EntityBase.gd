@@ -33,6 +33,7 @@ func _ready() -> void:
 		elif node is HurtboxComponent:
 			hurtbox_component = node
 	
+	hurtbox_component.owner_entity = self
 	hurtbox_component.my_team = self.my_team
 	getting_hit_manager.health_component = self.health_component
 	getting_hit_manager.hurtbox_component = self.hurtbox_component

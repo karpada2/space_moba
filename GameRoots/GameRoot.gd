@@ -10,3 +10,10 @@ func _ready() -> void:
 
 static func get_game_root() -> GameRoot:
 	return _current_game_root
+
+
+@abstract
+func get_all_visible_characters(team: Enums.Team) -> Array[CharacterBase]
+
+@abstract
+func get_all_characters() -> Array[CharacterBase]

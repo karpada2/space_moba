@@ -4,6 +4,8 @@ class_name HurtboxComponent
 signal got_hit(attack: Attack)
 signal revealed()
 
+var owner_entity: EntityBase
+
 var is_enabled: bool = true
 @export var my_team: Enums.Team = Enums.Team.NONE:
 	set(value):
@@ -20,6 +22,9 @@ var is_enabled: bool = true
 			set_collision_layer_value(2, false)
 			set_collision_layer_value(3, false)
 			set_collision_layer_value(4, true)
+
+func get_owning_entity() -> EntityBase:
+	return owner_entity
 
 func reveal() -> void:
 	revealed.emit()
