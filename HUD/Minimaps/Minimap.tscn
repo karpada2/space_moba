@@ -12,12 +12,3 @@ offset_bottom = 0.039993286
 texture = ExtResource("1_odjjw")
 expand_mode = 1
 script = ExtResource("1_fd6n6")
-my_team = 0
-
-[node name="Control" type="Control" parent="."]
-anchors_preset = 0
-offset_left = 10.2
-offset_top = 79.0
-offset_right = 50.2
-offset_bottom = 119.0
-pivot_offset = Vector2(20, 20)

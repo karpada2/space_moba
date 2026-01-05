@@ -4,7 +4,7 @@ class_name Minimap
 @export var full_map_binding_box: Vector2 = Vector2(2496, 2496)
 @export var mini_map_binding_box: Vector2 = Vector2(256, 256)
 
-@export var my_team: Enums.Team = Enums.Team.GOOD
+@export var my_team: Enums.Team = Enums.Team.NONE
 
 var characters_with_relevant_icons: Dictionary[CharacterBase, TextureRect]
 
@@ -32,7 +32,8 @@ func update_character_icons() -> void:
 		add_child.call_deferred(texture_rect)
 
 func advance(resolving_team: Enums.Team, _delta: float) -> void:
-	update_map(resolving_team)
+	if my_team == Enums.Team.NONE or resolving_team == my_team:
+		update_map(my_team)
 
 func update_map(resolving_team: Enums.Team) -> void:
 	var visible_characters: Array[CharacterBase] = GameRoot.get_game_root().get_all_visible_characters(resolving_team)

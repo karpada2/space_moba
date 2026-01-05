@@ -40,6 +40,12 @@ position = Vector2(-208, 56)
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Wall2"]
 polygon = PackedVector2Array(-50, -96, 21, -41, 60, 144, -39, 156, -61, -60)
 
+[node name="Polygon2D" type="Polygon2D" parent="Wall2"]
+light_mask = 4
+visibility_layer = 4
+color = Color(1, 0, 0, 1)
+polygon = PackedVector2Array(-50, -96, 21, -41, 60, 144, -39, 156, -61, -60)
+
 [node name="Minimaps" type="CanvasLayer" parent="."]
 
 [node name="Minimap" type="TextureRect" parent="Minimaps"]
@@ -58,4 +64,13 @@ my_team = 1
 [node name="EarthCharacter2" parent="." groups=["VisibleEntities"] instance=ExtResource("4_so4lt")]
 modulate = Color(1, 0, 1, 1)
 position = Vector2(277, -332)
+my_team = 2
+
+[node name="EarthCharacter3" parent="." groups=["VisibleEntities"] instance=ExtResource("4_so4lt")]
+position = Vector2(-766, 624)
+my_team = 1
+
+[node name="EarthCharacter4" parent="." groups=["VisibleEntities"] instance=ExtResource("4_so4lt")]
+modulate = Color(1, 0, 1, 1)
+position = Vector2(354, 184)
 my_team = 2
