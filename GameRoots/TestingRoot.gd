@@ -4,11 +4,11 @@ class_name TestingRoot
 class CharacterArray extends Object:
 	var array: Array[CharacterBase]
 
-var characters_by_team: Dictionary[Enums.Team, CharacterArray]
+var characters_by_team: Dictionary[Enums.Team, CharacterArray] = {}
 
 func _ready() -> void:
 	super()
-	get_all_characters(true)
+	get_all_characters()
 	TurnResolutionManager.resolution_started.connect(resolution_started)
 	TurnResolutionManager.resolution_advance.connect(advance)
 
@@ -49,7 +49,7 @@ func get_all_visible_characters(team: Enums.Team) -> Array[CharacterBase]:
 	return all_visible_characters
 
 func get_all_characters(force_update: bool = false) -> Array[CharacterBase]:
-	if characters_by_team == null or force_update:
+	if characters_by_team.is_empty() or force_update:
 		characters_by_team = {
 			Enums.Team.GOOD : CharacterArray.new(),
 			Enums.Team.EVIL : CharacterArray.new()
