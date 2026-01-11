@@ -1,10 +1,11 @@
-[gd_scene load_steps=6 format=3 uid="uid://b5w3iujlul5bw"]
+[gd_scene load_steps=7 format=3 uid="uid://b5w3iujlul5bw"]
 
 [ext_resource type="Texture2D" uid="uid://dc88ec5wny1rk" path="res://icon.svg" id="1_4kfho"]
 [ext_resource type="Script" uid="uid://cgkkjj6gisfb1" path="res://GameRoots/TestingRoot.gd" id="1_m46vn"]
 [ext_resource type="PackedScene" uid="uid://dd8vmp811q5j8" path="res://Terrain/Wall.tscn" id="2_8rypw"]
 [ext_resource type="Script" uid="uid://dtd6pqcc4vcqg" path="res://HUD/Minimaps/Minimap.gd" id="4_m46vn"]
 [ext_resource type="PackedScene" uid="uid://k3mslpvijhds" path="res://Entities/Characters/EarthCharacter/EarthCharacter.tscn" id="4_so4lt"]
+[ext_resource type="PackedScene" uid="uid://dg334efubhi5i" path="res://HUD/ActionChoosing/ActionChoosingInterface.tscn" id="5_m46vn"]
 
 [node name="TestingRoot" type="Node2D"]
 light_mask = 7
@@ -49,13 +50,41 @@ polygon = PackedVector2Array(-50, -96, 21, -41, 60, 144, -39, 156, -61, -60)
 [node name="Minimaps" type="CanvasLayer" parent="."]
 
 [node name="Minimap" type="TextureRect" parent="Minimaps"]
-offset_left = 896.0
-offset_top = 392.0
-offset_right = 1152.0
-offset_bottom = 648.0
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -256.0
+offset_top = -256.0
+grow_horizontal = 0
+grow_vertical = 0
 texture = ExtResource("1_4kfho")
 script = ExtResource("4_m46vn")
+my_team = 1
 metadata/_custom_type_script = "uid://dtd6pqcc4vcqg"
+
+[node name="Minimap2" type="TextureRect" parent="Minimaps"]
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -256.0
+offset_right = 256.0
+grow_vertical = 0
+texture = ExtResource("1_4kfho")
+script = ExtResource("4_m46vn")
+my_team = 2
+metadata/_custom_type_script = "uid://dtd6pqcc4vcqg"
+
+[node name="ActionChoosers" type="CanvasLayer" parent="."]
+
+[node name="ActionChoosingInterface" parent="ActionChoosers" instance=ExtResource("5_m46vn")]
+anchors_preset = 0
+anchor_top = 0.0
+anchor_bottom = 0.0
+offset_top = 0.0
+offset_bottom = 4.0
+grow_vertical = 1
 
 [node name="EarthCharacter" parent="." groups=["VisibleEntities"] instance=ExtResource("4_so4lt")]
 position = Vector2(-574, -240)

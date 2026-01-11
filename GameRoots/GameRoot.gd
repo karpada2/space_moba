@@ -2,6 +2,9 @@
 extends Node2D
 class_name GameRoot
 
+class CharacterArray extends Object:
+	var array: Array[CharacterBase]
+
 static var _current_game_root: GameRoot
 
 func _ready() -> void:

@@ -1,0 +1,34 @@
+[gd_scene load_steps=2 format=3 uid="uid://dg334efubhi5i"]
+
+[ext_resource type="Script" uid="uid://22kxym01yrfr" path="res://HUD/ActionChoosing/ActionChoosingInterface.gd" id="1_5almq"]
+
+[node name="ActionChoosingInterface" type="VBoxContainer"]
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -4.0
+grow_vertical = 0
+alignment = 2
+script = ExtResource("1_5almq")
+metadata/_custom_type_script = "uid://22kxym01yrfr"
+
+[node name="ModifiersContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="ChoicesContainer" type="VBoxContainer" parent="ModifiersContainer"]
+visible = false
+layout_mode = 2
+
+[node name="ChoicesLabel" type="Label" parent="ModifiersContainer/ChoicesContainer"]
+layout_mode = 2
+horizontal_alignment = 1
+
+[node name="Choices" type="OptionButton" parent="ModifiersContainer/ChoicesContainer"]
+layout_mode = 2
+
+[node name="Switches" type="VBoxContainer" parent="ModifiersContainer"]
+visible = false
+layout_mode = 2
+
+[node name="ActionsContainer" type="HBoxContainer" parent="."]
+layout_mode = 2

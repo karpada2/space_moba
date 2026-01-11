@@ -4,7 +4,7 @@ signal resolution_started(resolving_team: Enums.Team)
 signal resolution_ended()
 signal resolution_advance(resolving_team: Enums.Team, frame_count_of_turn: int)
 
-const FRAMES_PER_TURN: int = 60
+const FRAMES_PER_TURN: int = 240
 @export var _current_team: Enums.Team = Enums.Team.GOOD
 
 var _is_resolving: bool = true
@@ -18,10 +18,12 @@ func _physics_process(_delta: float) -> void:
 		elif frame_counter % FRAMES_PER_TURN == 0:
 			if _current_team == Enums.Team.GOOD:
 				_current_team = Enums.Team.EVIL
-				resolution_end()
+				frame_counter = 0
+				#resolution_end()
 			else:
 				_current_team = Enums.Team.GOOD
-				resolution_end()
+				frame_counter = 0
+				#resolution_end()
 		else:
 			resolution_advance.emit(_current_team, frame_counter)
 			frame_counter += 1

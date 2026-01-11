@@ -1,4 +1,4 @@
-@tool
+
 extends PointLight2D
 class_name DetectionAreaComponent
 

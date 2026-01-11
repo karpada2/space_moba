@@ -1,10 +1,41 @@
 extends GameRoot
 class_name TestingRoot
 
-class CharacterArray extends Object:
-	var array: Array[CharacterBase]
-
 var characters_by_team: Dictionary[Enums.Team, CharacterArray] = {}
+@onready var action_choosing_interface: ActionChoosingInterface = $ActionChoosers/ActionChoosingInterface
+
+var wait_action: PlayerAction = PlayerAction.create(
+	"wait",
+	1,
+	PlayerAction.TargetingType.NONE,
+	{},
+	["how", "are", "you"],
+	"realTest"
+)
+
+var move_action: PlayerAction = PlayerAction.create(
+	"move",
+	2,
+	PlayerAction.TargetingType.POSITION,
+	{
+		"test1": false,
+		"test2": true
+	},
+	[],
+	""
+)
+
+var attack_action: PlayerAction = PlayerAction.create(
+	"attack",
+	1,
+	PlayerAction.TargetingType.ENEMY,
+	{
+		"more test": false,
+		"a lot more test": false
+	},
+	["i am", "making", "game"],
+	"anotherTest"
+)
 
 func _ready() -> void:
 	super()
@@ -14,6 +45,17 @@ func _ready() -> void:
 
 func resolution_started(team: Enums.Team) -> void:
 	print(Enums.Team.find_key(team))
+	if team == Enums.Team.GOOD:
+		var action_array: PlayerActionArray = PlayerActionArray.new()
+		action_array.array.append_array([wait_action, attack_action])
+		action_choosing_interface.set_available_actions({"huh": action_array})
+		action_choosing_interface.populate_action_buttons()
+	else:
+		var action_array: PlayerActionArray = PlayerActionArray.new()
+		action_array.array.append_array([wait_action, move_action])
+		action_choosing_interface.set_available_actions({"huh": action_array})
+		action_choosing_interface.populate_action_buttons()
+	
 	get_tree().call_group("Characters", "unreveal")
 	for node: Node in get_tree().get_nodes_in_group("Characters"):
 		if node is CharacterBase and node.my_team == team:
@@ -61,6 +103,6 @@ func get_all_characters(force_update: bool = false) -> Array[CharacterBase]:
 
 func get_characters_in_team(team: Enums.Team) -> Array[CharacterBase]:
 	if team == Enums.Team.NONE:
-		return []
+		return get_all_characters()
 	get_all_characters()
 	return characters_by_team.get(team).array
