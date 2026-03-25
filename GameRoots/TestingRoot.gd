@@ -21,8 +21,14 @@ func _ready() -> void:
 	TurnResolutionManager.resolution_started.connect(resolution_started)
 	TurnResolutionManager.resolution_advance.connect(resolution_advance)
 	TurnResolutionManager.resolution_ended.connect(resolution_ended)
-	
-	advance_turn_phase()
+
+var has_started: bool = false
+
+func _process(_delta: float) -> void:
+	if Input.is_action_just_pressed("ui_accept") and !has_started:
+		print("haha!")
+		advance_turn_phase()
+		has_started = true
 
 func action_choosing_started(team: Enums.Team) -> void:
 	reveal_as_needed(team)

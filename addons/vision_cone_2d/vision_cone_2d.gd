@@ -1,4 +1,3 @@
-
 extends Node2D
 
 ## A configurable vision cone for 2D entities. It can be used for example to simulate the vision of enemies in a stealth game.
@@ -56,15 +55,13 @@ var _last_redraw_time: int = 0
 @onready var _angular_delta: float = _angle / ray_count
 
 func _process(_delta: float) -> void:
-	if (not Engine.is_editor_hint()):
-		if debug_lines or debug_shape:
-			queue_redraw()
+	if debug_lines or debug_shape:
+		queue_redraw()
 
 func _physics_process(delta: float) -> void:
-	if (not Engine.is_editor_hint()):
-		if Time.get_ticks_msec() - _last_redraw_time > minimum_recalculate_time_msec:
-			_last_redraw_time = Time.get_ticks_msec()
-			recalculate_vision()
+	if Time.get_ticks_msec() - _last_redraw_time > minimum_recalculate_time_msec:
+		_last_redraw_time = Time.get_ticks_msec()
+		recalculate_vision()
 
 func recalculate_vision(override_static_flag = false):
 	var should_recalculate = override_static_flag or recalculate_if_static
