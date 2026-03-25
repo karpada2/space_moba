@@ -21,13 +21,15 @@ static func get_game_root() -> GameRoot:
 func get_all_visible_characters(team: Enums.Team) -> Array[CharacterBase]
 
 func reveal_as_needed(team: Enums.Team) -> void:
-	var all_characters: Array[CharacterBase] = get_all_characters()
-	var visible_characters: Array[CharacterBase] = get_all_visible_characters(team)
-	for character: CharacterBase in all_characters:
-		if character in visible_characters:
-			character.reveal()
-		else:
-			character.unreveal()
+	pass
+	#var all_characters: Array[CharacterBase] = get_all_characters()
+	#
+	#for character: CharacterBase in all_characters:
+		#character.unreveal()
+	#
+	#for character: CharacterBase in get_characters_in_team(team):
+		#character.reveal()
+		#character.reveal_visible_enemies()
 
 @abstract
 func get_all_characters() -> Array[CharacterBase]

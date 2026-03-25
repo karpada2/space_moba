@@ -39,7 +39,8 @@ func get_visible_enemies() -> Array[CharacterBase]:
 	if working:
 		vision_cone_2d.recalculate_vision(true)
 		for node: Node2D in vision_cone_area.get_overlapping_bodies():
+			print(node.name)
 			if node is CharacterBase:
-				if (node.my_team == Enums.Team.EVIL and my_team == Enums.Team.GOOD) or (node.my_team == Enums.Team.GOOD and my_team == Enums.Team.EVIL):
+				if (node.my_team == Enums.Team.EVIL and my_team == Enums.Team.GOOD) or (node.my_team == Enums.Team.GOOD and my_team == Enums.Team.EVIL) or (node.my_team == Enums.Team.NONE):
 					visible_enemies.append(node)
 	return visible_enemies

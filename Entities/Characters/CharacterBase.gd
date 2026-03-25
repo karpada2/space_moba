@@ -121,9 +121,9 @@ func unreveal() -> void:
 func reveal_visible_enemies() -> void:
 	self.show()
 	detection_area.enable()
-	for area: Area2D in detection_area.vision_cone_area.get_overlapping_areas():
-		if area is HurtboxComponent:
-			area.reveal()
+	for node: Node2D in get_visible_enemies():
+		if node is CharacterBase:
+			node.reveal()
 
 func get_visible_enemies() -> Array[CharacterBase]:
 	return detection_area.get_visible_enemies()

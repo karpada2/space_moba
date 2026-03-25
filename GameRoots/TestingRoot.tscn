@@ -60,7 +60,7 @@ layout_mode = 2
 layout_mode = 2
 
 [node name="EarthCharacter" parent="." groups=["VisibleEntities"] instance=ExtResource("4_so4lt")]
-position = Vector2(-574, -480)
+position = Vector2(566, -93)
 my_team = 1
 
 [node name="EarthCharacter2" parent="." groups=["VisibleEntities"] instance=ExtResource("4_so4lt")]

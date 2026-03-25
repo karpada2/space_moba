@@ -45,8 +45,6 @@ func set_lock_in_button(new_button: Button) -> void:
 	lock_in_button.pressed.connect(_on_lock_in_button_pressed)
 
 func set_character(character: CharacterBase) -> void:
-	print("action choosing interface character set:", character.get_display_name())
-	
 	if last_character:
 		action_chosen.disconnect(last_character.action_selected)
 		action_focused.disconnect(last_character.action_focused)
