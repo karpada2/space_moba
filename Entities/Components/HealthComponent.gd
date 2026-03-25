@@ -7,3 +7,10 @@ signal revived()
 
 @export var max_health: float = 600
 @export var curr_health: float = 600
+
+func deal_damage(amount: float) -> void:
+	curr_health -= amount
+	health_changed.emit(curr_health)
+	if curr_health <= 0:
+		curr_health = 0
+		died.emit()

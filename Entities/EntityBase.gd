@@ -22,7 +22,7 @@ class BaseMoveAction extends Action:
 		var new_action: BaseMoveAction = BaseMoveAction.new()
 		var path_length: float = 0
 		new_action.my_entity = entity
-		new_action.action_name = entity.get_display_name()
+		new_action.action_name = "Move"
 		new_action.move_distance_per_frame = move_distance_per_frame_in
 		new_action.action_length_turns = 1
 		new_action.target_type = TargetingType.POSITION
@@ -80,6 +80,39 @@ class BaseMoveAction extends Action:
 		finished = is_target_reached()
 		return not is_target_reached()
 
+## applies the attack only, combined with an animation action before and after to achieve cool effect. this way multi-hit-attacks and shit also work.
+class BaseAttackAction extends Action:
+	var attack: Attack
+	
+	func target_set() -> void:
+		target_entity.material.set("shader_parameter/mix_amount", 0.5)
+	
+	func get_action_length_frames() -> int:
+		return 0
+	
+	static func create(attack_in: Attack) -> BaseAttackAction:
+		var new_action: BaseAttackAction = BaseAttackAction.new()
+		new_action.action_name = "Attack"
+		new_action.action_length_turns = 1
+		new_action.target_type = TargetingType.ENEMY
+		
+		new_action.attack = attack_in
+		
+		return new_action
+	
+	func clone() -> BaseAttackAction:
+		var new_action: BaseAttackAction = _clone_inner()
+		new_action.attack = self.attack.clone()
+		
+		return new_action
+	
+	func _new_inner() -> BaseAttackAction:
+		return BaseAttackAction.new()
+	
+	func run(_frames_passed: int) -> bool:
+		target_entity.getting_hit_manager.attack(attack)
+		target_entity.material.set("shader_parameter/mix_amount", 0)
+		return false
 
 @export var my_team: Enums.Team = Enums.Team.NONE
 

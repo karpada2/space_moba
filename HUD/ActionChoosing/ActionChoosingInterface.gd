@@ -35,7 +35,7 @@ func _ready() -> void:
 
 func _physics_process(_delta: float) -> void:
 	if focused_action:
-		wait_before_acting_slider.max_value = TurnResolutionManager.FRAMES_PER_TURN - focused_action.get_action_length_frames()
+		wait_before_acting_slider.max_value = TurnResolutionManager.FRAMES_PER_TURN - last_character.create_wait_and_move_action(focused_action, 0).get_action_length_frames()
 		max_slider_value_showcase.text = str(int(wait_before_acting_slider.max_value))
 		current_slider_value_showcase.text = str(int(wait_before_acting_slider.value))
 
@@ -177,13 +177,12 @@ func update_available_modifiers(action: Action) -> void:
 
 func _on_lock_in_button_pressed() -> void:
 	if focused_action != null:
-		action_chosen.emit(
-			SequentialAction.create(focused_action.action_name, ActionArray.create([WaitAction.create(int(wait_before_acting_slider.value)), focused_action]))
-			)
-		for node: Node in actions_container.get_children():
-			if node is BaseButton:
-				node.disabled = true
-		for node: Node in switches.get_children():
-			if node is BaseButton:
-				node.disabled = true
-		choices.disabled = true
+		if focused_action.is_configured():
+			action_chosen.emit(focused_action, int(wait_before_acting_slider.value))
+			for node: Node in actions_container.get_children():
+				if node is BaseButton:
+					node.disabled = true
+			for node: Node in switches.get_children():
+				if node is BaseButton:
+					node.disabled = true
+			choices.disabled = true

@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://b5w3iujlul5bw"]
+[gd_scene load_steps=16 format=3 uid="uid://b5w3iujlul5bw"]
 
 [ext_resource type="Texture2D" uid="uid://dc88ec5wny1rk" path="res://icon.svg" id="1_4kfho"]
 [ext_resource type="Script" uid="uid://cgkkjj6gisfb1" path="res://GameRoots/TestingRoot.gd" id="1_m46vn"]
@@ -6,6 +6,118 @@
 [ext_resource type="Script" uid="uid://dtd6pqcc4vcqg" path="res://HUD/Minimaps/Minimap.gd" id="4_m46vn"]
 [ext_resource type="PackedScene" uid="uid://k3mslpvijhds" path="res://Entities/Characters/EarthCharacter/EarthCharacter.tscn" id="4_so4lt"]
 [ext_resource type="PackedScene" uid="uid://dg334efubhi5i" path="res://HUD/ActionChoosing/ActionChoosingInterface.tscn" id="5_m46vn"]
+
+[sub_resource type="Shader" id="Shader_m46vn"]
+resource_local_to_scene = true
+code = "shader_type canvas_item;
+const vec4 tint = vec4(1, 0, 0, 1);
+uniform float mix_amount : hint_range(0, 1) = 0.5;
+
+void vertex() {
+	// Called for every vertex the material is visible on.
+}
+
+void fragment() {
+    vec4 tex = texture(TEXTURE, UV);
+	if (tex.a != 0.0){
+		COLOR = mix(tex, tint, mix_amount);
+	}
+}
+
+//void light() {
+//	// Called for every pixel for every light affecting the CanvasItem.
+//	// Uncomment to replace the default light processing function with this one.
+//}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_hrkw6"]
+resource_local_to_scene = true
+shader = SubResource("Shader_m46vn")
+shader_parameter/mix_amount = 0.0
+
+[sub_resource type="Shader" id="Shader_qjowt"]
+resource_local_to_scene = true
+code = "shader_type canvas_item;
+const vec4 tint = vec4(1, 0, 0, 1);
+uniform float mix_amount : hint_range(0, 1) = 0.5;
+
+void vertex() {
+	// Called for every vertex the material is visible on.
+}
+
+void fragment() {
+    vec4 tex = texture(TEXTURE, UV);
+	if (tex.a != 0.0){
+		COLOR = mix(tex, tint, mix_amount);
+	}
+}
+
+//void light() {
+//	// Called for every pixel for every light affecting the CanvasItem.
+//	// Uncomment to replace the default light processing function with this one.
+//}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_gondq"]
+resource_local_to_scene = true
+shader = SubResource("Shader_qjowt")
+shader_parameter/mix_amount = 0.0
+
+[sub_resource type="Shader" id="Shader_12iin"]
+resource_local_to_scene = true
+code = "shader_type canvas_item;
+const vec4 tint = vec4(1, 0, 0, 1);
+uniform float mix_amount : hint_range(0, 1) = 0.5;
+
+void vertex() {
+	// Called for every vertex the material is visible on.
+}
+
+void fragment() {
+    vec4 tex = texture(TEXTURE, UV);
+	if (tex.a != 0.0){
+		COLOR = mix(tex, tint, mix_amount);
+	}
+}
+
+//void light() {
+//	// Called for every pixel for every light affecting the CanvasItem.
+//	// Uncomment to replace the default light processing function with this one.
+//}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_uumw7"]
+resource_local_to_scene = true
+shader = SubResource("Shader_12iin")
+shader_parameter/mix_amount = 0.0
+
+[sub_resource type="Shader" id="Shader_gp5ni"]
+resource_local_to_scene = true
+code = "shader_type canvas_item;
+const vec4 tint = vec4(1, 0, 0, 1);
+uniform float mix_amount : hint_range(0, 1) = 0.5;
+
+void vertex() {
+	// Called for every vertex the material is visible on.
+}
+
+void fragment() {
+    vec4 tex = texture(TEXTURE, UV);
+	if (tex.a != 0.0){
+		COLOR = mix(tex, tint, mix_amount);
+	}
+}
+
+//void light() {
+//	// Called for every pixel for every light affecting the CanvasItem.
+//	// Uncomment to replace the default light processing function with this one.
+//}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_54qov"]
+resource_local_to_scene = true
+shader = SubResource("Shader_gp5ni")
+shader_parameter/mix_amount = 0.0
 
 [sub_resource type="NavigationPolygon" id="NavigationPolygon_m46vn"]
 vertices = PackedVector2Array(1339.2422, 1244.2891, -1311.5313, 1259.7031, -87.82031, 243.07031, 21.21875, 157.1875, -291.57813, 267.77344, 136.96094, -26.617188, 1300.7578, -1291.6797, -1288.4375, -1275.3125, -319.7578, -8.96875, 24.132813, -73.078125, -284.64844, -123.890625, -141.85938, -13.28125, -101.796875, 6.5625, -38.992188, 152.5)
@@ -60,20 +172,24 @@ layout_mode = 2
 layout_mode = 2
 
 [node name="EarthCharacter" parent="." groups=["VisibleEntities"] instance=ExtResource("4_so4lt")]
+material = SubResource("ShaderMaterial_hrkw6")
 position = Vector2(-842, -285)
 my_team = 1
 
 [node name="EarthCharacter2" parent="." groups=["VisibleEntities"] instance=ExtResource("4_so4lt")]
 modulate = Color(1, 0, 1, 1)
+material = SubResource("ShaderMaterial_gondq")
 position = Vector2(-211, -828)
 my_team = 2
 
 [node name="EarthCharacter3" parent="." groups=["VisibleEntities"] instance=ExtResource("4_so4lt")]
+material = SubResource("ShaderMaterial_uumw7")
 position = Vector2(-766, 624)
 my_team = 1
 
 [node name="EarthCharacter4" parent="." groups=["VisibleEntities"] instance=ExtResource("4_so4lt")]
 modulate = Color(1, 0, 1, 1)
+material = SubResource("ShaderMaterial_54qov")
 position = Vector2(882, 184)
 my_team = 2
 

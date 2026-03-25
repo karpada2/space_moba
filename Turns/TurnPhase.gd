@@ -16,8 +16,8 @@ static var EVIL_TEAM_RESOLVE: TurnPhase = TurnPhase._create(3, Enums.Team.EVIL)
 @warning_ignore("unused_private_class_variable")
 static var _trash: OrderTurnPhase = OrderTurnPhase.order([
 	GOOD_TEAM_CHOOSE, 
-	EVIL_TEAM_CHOOSE, 
 	GOOD_TEAM_RESOLVE, 
+	EVIL_TEAM_CHOOSE, 
 	EVIL_TEAM_RESOLVE,
 	GOOD_TEAM_CHOOSE
 	])

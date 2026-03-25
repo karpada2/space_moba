@@ -1,11 +1,18 @@
-[gd_scene load_steps=8 format=3 uid="uid://k3mslpvijhds"]
+[gd_scene load_steps=11 format=3 uid="uid://k3mslpvijhds"]
 
+[ext_resource type="Shader" uid="uid://6kwpnb0kq428" path="res://Entities/EntityShader.gdshader" id="1_3nsai"]
 [ext_resource type="Script" uid="uid://cckinmhmx0uvy" path="res://Entities/Characters/EarthCharacter/EarthCharacter.gd" id="1_oofe1"]
 [ext_resource type="Texture2D" uid="uid://dddmxxuasemfw" path="res://Entities/Characters/EarthCharacter/EarthSprite.png" id="2_symtk"]
 [ext_resource type="Script" uid="uid://dsopyue7txr2b" path="res://Entities/Components/HealthComponent.gd" id="3_0y17a"]
 [ext_resource type="Script" uid="uid://cmrwry3cgj18k" path="res://Entities/Components/GettingHitManagerComponent.gd" id="4_symtk"]
 [ext_resource type="Script" uid="uid://b5uttgqqjgqly" path="res://Entities/Components/HurtboxComponent.gd" id="5_h1xd8"]
+[ext_resource type="PackedScene" uid="uid://cr32u8kaclsx1" path="res://Entities/Components/TargetChooser.tscn" id="7_3nsai"]
 [ext_resource type="PackedScene" uid="uid://cg8sovak1nglu" path="res://Entities/Components/DetectionAreaComponent.tscn" id="7_h1xd8"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_5dj41"]
+resource_local_to_scene = true
+shader = ExtResource("1_3nsai")
+shader_parameter/mix_amount = 0.0
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_symtk"]
 radius = 28.0
@@ -14,15 +21,18 @@ height = 90.0
 [node name="EarthCharacter" type="CharacterBody2D" groups=["Characters"]]
 light_mask = 7
 visibility_layer = 7
+material = SubResource("ShaderMaterial_5dj41")
 collision_layer = 0
 collision_mask = 0
 motion_mode = 1
 script = ExtResource("1_oofe1")
 move_speed_human = 200.0
+attack_range = 275.0
 metadata/_custom_type_script = "uid://cckinmhmx0uvy"
 
 [node name="Sprite" type="Sprite2D" parent="."]
 z_index = 2
+use_parent_material = true
 scale = Vector2(8.14, 8.14)
 texture = ExtResource("2_symtk")
 
@@ -61,11 +71,13 @@ shape = SubResource("CapsuleShape2D_symtk")
 [node name="MovePathVisualizer" type="Line2D" parent="."]
 visible = false
 top_level = true
-default_color = Color(1, 0, 1, 1)
+default_color = Color(1, 0, 1, 0.047058824)
 
 [node name="PositionSelectIndicator" type="Polygon2D" parent="."]
 visible = false
 top_level = true
 scale = Vector2(9.03, 9.03)
-color = Color(1, 0, 1, 1)
+color = Color(1, 0, 1, 0.047058824)
 polygon = PackedVector2Array(8.66, 6, 8.66, -5, 0, -10, -8.66, -5, -8.66, 5, 0, 10)
+
+[node name="TargetChooser" parent="." instance=ExtResource("7_3nsai")]

@@ -76,17 +76,22 @@ func _set_target_entity(new_entity: EntityBase) -> void:
 func set_target_position(new_position: Vector2, simulate: bool = false) -> void:
 	if target_type == TargetingType.POSITION:
 		target_position = new_position
-		if not simulate:
+		if not simulate and target_position.is_finite():
 			target_chosen = true
+			target_set()
 
 func set_target_entity(new_entity: EntityBase, simulate: bool = false) -> void:
 	if target_type in [TargetingType.ALLY, TargetingType.ENEMY, TargetingType.ANY]:
 		target_entity = new_entity
-		if not simulate:
+		if not simulate and target_entity:
 			target_chosen = true
+			target_set()
 
 func reset_target() -> void:
 	target_chosen = false
+
+func target_set() -> void:
+	pass
 
 @abstract
 func get_action_length_frames() -> int
