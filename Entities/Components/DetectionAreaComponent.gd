@@ -1,4 +1,3 @@
-
 extends PointLight2D
 class_name DetectionAreaComponent
 
@@ -18,7 +17,7 @@ class_name DetectionAreaComponent
 
 var working: bool = true
 
-func _process(_delta: float) -> void:
+func _physics_process(_delta: float) -> void:
 	vision_cone_2d.max_distance = (diameter/2.0)
 	texture_scale = diameter/256.0
 	vision_cone_2d.recalculate_vision()
@@ -27,7 +26,6 @@ func enable() -> void:
 	working = true
 	self.enabled = true
 	vision_cone_area.monitoring = true
-	vision_cone_2d.recalculate_vision(true)
 
 func disable() -> void:
 	working = false
@@ -37,9 +35,7 @@ func disable() -> void:
 func get_visible_enemies() -> Array[CharacterBase]:
 	var visible_enemies: Array[CharacterBase] = []
 	if working:
-		vision_cone_2d.recalculate_vision(true)
 		for node: Node2D in vision_cone_area.get_overlapping_bodies():
-			print(node.name)
 			if node is CharacterBase:
 				if (node.my_team == Enums.Team.EVIL and my_team == Enums.Team.GOOD) or (node.my_team == Enums.Team.GOOD and my_team == Enums.Team.EVIL) or (node.my_team == Enums.Team.NONE):
 					visible_enemies.append(node)

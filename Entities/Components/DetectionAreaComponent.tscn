@@ -20,7 +20,7 @@ minimum_recalculate_time_msec = 500
 
 [node name="VisionConeArea" type="Area2D" parent="VisionCone2D"]
 collision_layer = 0
-collision_mask = 2
+collision_mask = 4294967295
 monitorable = false
 
 [node name="VisionConeCollider" type="CollisionPolygon2D" parent="VisionCone2D/VisionConeArea"]

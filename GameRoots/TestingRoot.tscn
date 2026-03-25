@@ -60,12 +60,12 @@ layout_mode = 2
 layout_mode = 2
 
 [node name="EarthCharacter" parent="." groups=["VisibleEntities"] instance=ExtResource("4_so4lt")]
-position = Vector2(-218, -285)
+position = Vector2(-842, -285)
 my_team = 1
 
 [node name="EarthCharacter2" parent="." groups=["VisibleEntities"] instance=ExtResource("4_so4lt")]
 modulate = Color(1, 0, 1, 1)
-position = Vector2(277, -332)
+position = Vector2(-211, -828)
 my_team = 2
 
 [node name="EarthCharacter3" parent="." groups=["VisibleEntities"] instance=ExtResource("4_so4lt")]
@@ -74,7 +74,7 @@ my_team = 1
 
 [node name="EarthCharacter4" parent="." groups=["VisibleEntities"] instance=ExtResource("4_so4lt")]
 modulate = Color(1, 0, 1, 1)
-position = Vector2(354, 184)
+position = Vector2(882, 184)
 my_team = 2
 
 [node name="NavigationRegion2D" type="NavigationRegion2D" parent="."]

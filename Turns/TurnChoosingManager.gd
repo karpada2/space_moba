@@ -1,6 +1,7 @@
 extends Node
 
 signal choosing_start(choosing_team: Enums.Team)
+signal choosing_advance(choosing_team: Enums.Team)
 signal choosing_end(choosing_team: Enums.Team)
 
 var has_chosen: Dictionary[CharacterBase, bool]
@@ -18,6 +19,7 @@ var action_choosing_character_switchers_container: HBoxContainer
 func _physics_process(_delta: float) -> void:
 	if is_choosing_now():
 		action_choosing_interface.last_character.action_choosing_advance()
+		choosing_advance.emit(current_choosing_team)
 
 func create_action_chooser_character_switcher_button_group() -> ButtonGroup:
 	var temp: ButtonGroup = ButtonGroup.new()

@@ -23,12 +23,18 @@ func get_all_visible_characters(team: Enums.Team) -> Array[CharacterBase]
 func reveal_as_needed(team: Enums.Team) -> void:
 	var all_characters: Array[CharacterBase] = get_all_characters()
 	
-	for character: CharacterBase in all_characters:
-		character.unreveal()
+	var visible_characters: Array[CharacterBase] = get_all_visible_characters(team)
 	
-	for character: CharacterBase in get_characters_in_team(team):
-		character.reveal()
-		character.reveal_visible_enemies()
+	for character: CharacterBase in all_characters:
+		if character in visible_characters:
+			character.reveal()
+		else:
+			character.unreveal()
+
+func enable_team(team: Enums.Team) -> void:
+	var team_characters: Array[CharacterBase] = get_characters_in_team(team)
+	for character: CharacterBase in team_characters:
+		character.enable()
 
 @abstract
 func get_all_characters() -> Array[CharacterBase]

@@ -110,9 +110,12 @@ func _on_move_path_changed() -> void:
 		navigation_path[i] = to_local(navigation_path[i])
 		move_path_visualizer.add_point(navigation_path[i])
 
-func reveal() -> void:
+func enable() -> void:
 	show()
 	detection_area.enable()
+
+func reveal() -> void:
+	show()
 
 func unreveal() -> void:
 	self.hide()

@@ -16,27 +16,24 @@ func _ready() -> void:
 	TurnChoosingManager.action_choosing_character_switchers_container = action_choosing_character_switchers_container
 	
 	TurnChoosingManager.choosing_start.connect(action_choosing_started)
+	TurnChoosingManager.choosing_advance.connect(reveal_as_needed)
 	TurnChoosingManager.choosing_end.connect(action_choosing_ended)
 	
 	TurnResolutionManager.resolution_started.connect(resolution_started)
 	TurnResolutionManager.resolution_advance.connect(resolution_advance)
 	TurnResolutionManager.resolution_ended.connect(resolution_ended)
-
-var has_started: bool = false
-
-func _process(_delta: float) -> void:
-	if Input.is_action_just_pressed("ui_accept") and !has_started:
-		print("haha!")
-		advance_turn_phase()
-		has_started = true
+	
+	advance_turn_phase()
 
 func action_choosing_started(team: Enums.Team) -> void:
+	enable_team(team)
 	reveal_as_needed(team)
 
 func action_choosing_ended(_team: Enums.Team) -> void:
 	advance_turn_phase()
 
 func resolution_started(team: Enums.Team) -> void:
+	enable_team(team)
 	reveal_as_needed(team)
 
 func resolution_advance(team: Enums.Team, _frame_count: int) -> void:
