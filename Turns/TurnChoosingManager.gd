@@ -25,12 +25,7 @@ func create_action_chooser_character_switcher_button_group() -> ButtonGroup:
 	temp.allow_unpress = false
 	return temp
 
-func _action_locked(character: CharacterBase) -> void:
-	pass
-
 func start_choosing(team: Enums.Team) -> void:
-	if not action_choosing_interface.action_locked.is_connected(_action_locked):
-		action_choosing_interface.action_locked.connect(_action_locked)
 	_in_choosing_phase = true
 	
 	action_choosing_interface.clear_caches()

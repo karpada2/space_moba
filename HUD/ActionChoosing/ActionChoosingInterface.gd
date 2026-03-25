@@ -1,7 +1,6 @@
 extends VBoxContainer
 class_name ActionChoosingInterface
 
-signal action_locked(locking_character: CharacterBase)
 signal action_chosen(action: Action, wait_frames_before_action: int)
 signal action_focused(action: Action)
 
@@ -181,7 +180,6 @@ func _on_lock_in_button_pressed() -> void:
 		action_chosen.emit(
 			SequentialAction.create(focused_action.action_name, ActionArray.create([WaitAction.create(int(wait_before_acting_slider.value)), focused_action]))
 			)
-		action_locked.emit(last_character)
 		for node: Node in actions_container.get_children():
 			if node is BaseButton:
 				node.disabled = true
