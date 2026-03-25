@@ -18,6 +18,7 @@ collision_layer = 0
 collision_mask = 0
 motion_mode = 1
 script = ExtResource("1_oofe1")
+move_speed_human = 200.0
 metadata/_custom_type_script = "uid://cckinmhmx0uvy"
 
 [node name="Sprite" type="Sprite2D" parent="."]
@@ -59,10 +60,12 @@ shape = SubResource("CapsuleShape2D_symtk")
 
 [node name="MovePathVisualizer" type="Line2D" parent="."]
 visible = false
+top_level = true
 default_color = Color(1, 0, 1, 1)
 
 [node name="PositionSelectIndicator" type="Polygon2D" parent="."]
 visible = false
+top_level = true
 scale = Vector2(9.03, 9.03)
 color = Color(1, 0, 1, 1)
 polygon = PackedVector2Array(8.66, 6, 8.66, -5, 0, -10, -8.66, -5, -8.66, 5, 0, 10)

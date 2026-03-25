@@ -8,9 +8,9 @@ static func create(action_name_in: String, actions: ActionArray) -> SequentialAc
 	
 	new_action.action_name = action_name_in
 	new_action.actions_to_be_performed = actions
+	new_action.resource_name = "SequentialAction"
 	
-	@warning_ignore("integer_division")
-	new_action.action_length_turns = (new_action.get_action_length_frames()/TurnResolutionManager.FRAMES_PER_TURN) + 1
+	new_action.action_length_turns = int(ceilf(float(new_action.get_action_length_frames())/TurnResolutionManager.FRAMES_PER_TURN))
 	
 	return new_action
 

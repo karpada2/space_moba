@@ -9,5 +9,6 @@ enum DamageType {
 enum Team {
 	NONE,
 	GOOD,
-	EVIL
+	EVIL,
+	NULL
 }

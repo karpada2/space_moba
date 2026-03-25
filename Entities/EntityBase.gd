@@ -74,7 +74,9 @@ class BaseMoveAction extends Action:
 			return is_position_reached(path[-1])
 	
 	func run(_frames_passed: int) -> bool:
-		my_entity.translate((get_next_path_position() - my_entity.global_position)/my_entity.get_move_distance_per_frame())
+		var translation_vector: Vector2 = (get_next_path_position() - my_entity.global_position)
+		translation_vector = translation_vector.limit_length(move_distance_per_frame)
+		my_entity.translate(translation_vector)
 		finished = is_target_reached()
 		return not is_target_reached()
 
@@ -84,6 +86,23 @@ class BaseMoveAction extends Action:
 var getting_hit_manager: GettingHitManagerComponent
 var health_component: HealthComponent
 var hurtbox_component: HurtboxComponent
+
+var _display_name: String
+var _display_name_set: bool = false
+
+# returns whether the name was set successfully
+func set_display_name(new_name: String) -> bool:
+	_display_name = new_name
+	_display_name_set = true
+	return true
+
+func get_display_name() -> String:
+	if not _display_name_set:
+		set_display_name(self.name)
+	return _display_name
+
+@abstract
+func reveal() -> void
 
 @abstract
 func unreveal() -> void

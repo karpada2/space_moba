@@ -1,5 +1,6 @@
 @abstract
 extends Resource
+## Actions for entities to run
 class_name Action
 
 
@@ -35,11 +36,11 @@ var target_type: TargetingType
 ## holds the target position, if and only if targetType is POSITION.[br]
 ## should only be read.
 var target_position: Vector2:
-	set = set_target_position
+	set = _set_target_position
 ## holds the target entity, if targetType is *NOT* POSITION.[br]
 ## should only be read.
 var target_entity: EntityBase:
-	set = set_target_entity
+	set = _set_target_entity
 
 ## Whether a target entity or position has been chosen
 var target_chosen: bool = false
@@ -64,15 +65,25 @@ var finished: bool = false
 func is_configured() -> bool:
 	return target_chosen
 
-func set_target_position(new_position: Vector2) -> void:
+func _set_target_position(new_position: Vector2) -> void:
 	if target_type == TargetingType.POSITION:
 		target_position = new_position
-		target_chosen = true
 
-func set_target_entity(new_entity: EntityBase) -> void:
+func _set_target_entity(new_entity: EntityBase) -> void:
 	if target_type in [TargetingType.ALLY, TargetingType.ENEMY, TargetingType.ANY]:
 		target_entity = new_entity
-		target_chosen = true
+
+func set_target_position(new_position: Vector2, simulate: bool = false) -> void:
+	if target_type == TargetingType.POSITION:
+		target_position = new_position
+		if not simulate:
+			target_chosen = true
+
+func set_target_entity(new_entity: EntityBase, simulate: bool = false) -> void:
+	if target_type in [TargetingType.ALLY, TargetingType.ENEMY, TargetingType.ANY]:
+		target_entity = new_entity
+		if not simulate:
+			target_chosen = true
 
 func reset_target() -> void:
 	target_chosen = false

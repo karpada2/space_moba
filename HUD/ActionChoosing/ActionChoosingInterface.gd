@@ -45,9 +45,11 @@ func set_lock_in_button(new_button: Button) -> void:
 	lock_in_button.pressed.connect(_on_lock_in_button_pressed)
 
 func set_character(character: CharacterBase) -> void:
-	if last_character != null:
-		action_chosen.disconnect(character.action_selected)
-		action_focused.disconnect(character.action_focused)
+	print("action choosing interface character set:", character.get_display_name())
+	
+	if last_character:
+		action_chosen.disconnect(last_character.action_selected)
+		action_focused.disconnect(last_character.action_focused)
 	set_available_actions(character.get_available_actions())
 	populate_action_buttons()
 	action_chosen.connect(character.action_selected)
@@ -109,6 +111,7 @@ func switch_updated(switch_title: String, value: bool) -> void:
 func _action_pressed(pressed_action: Action) -> void:
 	lock_in_button.disabled = false
 	focused_action = pressed_action
+	focused_action.reset_target()
 	update_available_modifiers(pressed_action)
 	
 	action_focused.emit(focused_action)

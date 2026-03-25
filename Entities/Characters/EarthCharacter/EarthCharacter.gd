@@ -14,9 +14,5 @@ func get_available_actions() -> Dictionary[String, ActionArray]:
 		)
 	}
 
-func is_action_possible(_action: Action) -> bool:
-	return true
-
-func turn_resolution_advance(resolving_team: Enums.Team, _frame_count: int) -> void:
-	if resolving_team == my_team:
-		pass
+func is_action_possible(action: Action) -> bool:
+	return action.get_action_length_frames() <= TurnResolutionManager.FRAMES_PER_TURN

@@ -13,6 +13,7 @@ func _new_inner() -> WaitAction:
 static func create(frames_to_wait: int) -> WaitAction:
 	var new_action: WaitAction = WaitAction.new()
 	new_action.action_length_frames = frames_to_wait
+	new_action.resource_name = "WaitAction"
 	
 	return new_action
 

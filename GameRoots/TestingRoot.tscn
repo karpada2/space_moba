@@ -47,27 +47,17 @@ script = ExtResource("4_m46vn")
 my_team = 1
 metadata/_custom_type_script = "uid://dtd6pqcc4vcqg"
 
-[node name="Minimap2" type="TextureRect" parent="Minimaps"]
-anchors_preset = 2
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_top = -256.0
-offset_right = 256.0
-grow_vertical = 0
-texture = ExtResource("1_4kfho")
-script = ExtResource("4_m46vn")
-my_team = 2
-metadata/_custom_type_script = "uid://dtd6pqcc4vcqg"
-
 [node name="ActionChoosers" type="CanvasLayer" parent="."]
 
-[node name="ActionChoosingInterface" parent="ActionChoosers" instance=ExtResource("5_m46vn")]
-anchors_preset = 10
-anchor_top = 0.0
-anchor_bottom = 0.0
-offset_top = 0.0
-offset_bottom = 4.0
-grow_vertical = 1
+[node name="VBoxContainer" type="VBoxContainer" parent="ActionChoosers"]
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="ActionChoosingCharacterSwitchers" type="HBoxContainer" parent="ActionChoosers/VBoxContainer"]
+layout_mode = 2
+
+[node name="ActionChoosingInterface" parent="ActionChoosers/VBoxContainer" instance=ExtResource("5_m46vn")]
+layout_mode = 2
 
 [node name="EarthCharacter" parent="." groups=["VisibleEntities"] instance=ExtResource("4_so4lt")]
 position = Vector2(-574, -480)
