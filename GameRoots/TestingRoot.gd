@@ -25,21 +25,7 @@ func _ready() -> void:
 	advance_turn_phase()
 
 func action_choosing_started(team: Enums.Team) -> void:
-	get_tree().call_group("Characters", "unreveal")
-	for node: Node in get_tree().get_nodes_in_group("Characters"):
-		if node is CharacterBase and node.my_team == team:
-			(node as CharacterBase).reveal_visible_enemies()
-
-func action_choosing_advance(team: Enums.Team) -> void:
-	var all_characters: Array[CharacterBase] = get_all_characters()
-	
-	var visible_characters: Array[CharacterBase] = get_all_visible_characters(team)
-	
-	for character: CharacterBase in all_characters:
-		if character in visible_characters:
-			character.reveal()
-		else:
-			character.unreveal()
+	reveal_as_needed(team)
 
 func action_choosing_ended(_team: Enums.Team) -> void:
 	advance_turn_phase()

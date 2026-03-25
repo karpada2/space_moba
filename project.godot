@@ -25,6 +25,10 @@ TurnChoosingManager="*res://Turns/TurnChoosingManager.gd"
 gdscript/warnings/untyped_declaration=2
 gdscript/warnings/inferred_declaration=1
 
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/vision_cone_2d/plugin.cfg")
+
 [global_group]
 
 Characters=""
