@@ -9,6 +9,9 @@ class_name Minimap
 var characters_with_relevant_icons: Dictionary[CharacterBase, TextureRect]
 
 func _ready() -> void:
+	TurnChoosingManager.choosing_start.connect(update_character_icons_wrapper)
+	TurnChoosingManager.choosing_advance.connect(advance_wrapper)
+	
 	TurnResolutionManager.resolution_advance.connect(advance)
 	TurnResolutionManager.resolution_started.connect(update_character_icons_wrapper)
 
@@ -31,7 +34,10 @@ func update_character_icons() -> void:
 		characters_with_relevant_icons.set(character, texture_rect)
 		add_child.call_deferred(texture_rect)
 
-func advance(resolving_team: Enums.Team, _delta: float) -> void:
+func advance_wrapper(resolving_team: Enums.Team) -> void:
+	advance(resolving_team, 0)
+
+func advance(resolving_team: Enums.Team, _frames_since_start: int) -> void:
 	if my_team == Enums.Team.NONE or resolving_team == my_team:
 		update_map(my_team)
 

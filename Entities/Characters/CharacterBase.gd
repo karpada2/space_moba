@@ -120,6 +120,8 @@ func reveal() -> void:
 func unreveal() -> void:
 	self.hide()
 	detection_area.disable()
+	position_select_indicator.hide()
+	move_path_visualizer.hide()
 
 func reveal_visible_enemies() -> void:
 	self.show()

@@ -1,12 +1,14 @@
 extends VBoxContainer
 class_name ActionChoosingInterface
 
-
+signal action_locked(locking_character: CharacterBase)
 signal action_chosen(action: Action, wait_frames_before_action: int)
 signal action_focused(action: Action)
 
 var last_character: CharacterBase
-
+var characters_actions_cache: Dictionary[CharacterBase, OrganizedActionArrays] = {}
+var characters_focused_actions_cache: Dictionary[CharacterBase, Action] = {}
+var characters_wait_before_acting_cache: Dictionary[CharacterBase, int] = {}
 
 @onready var modifiers_container: HBoxContainer = $ModifiersContainer
 
@@ -48,11 +50,34 @@ func set_character(character: CharacterBase) -> void:
 	if last_character:
 		action_chosen.disconnect(last_character.action_selected)
 		action_focused.disconnect(last_character.action_focused)
-	set_available_actions(character.get_available_actions())
+		if focused_action and character.my_team == last_character.my_team:
+			characters_actions_cache.set(last_character, OrganizedActionArrays.create(available_actions))
+			characters_focused_actions_cache.set(last_character, focused_action)
+			characters_wait_before_acting_cache.set(last_character, int(wait_before_acting_slider.value))
+	
+	var character_seen: bool = characters_actions_cache.has(character)
+	
+	if character_seen:
+		set_available_actions(characters_actions_cache.get(character).dictionary)
+		focused_action = characters_focused_actions_cache.get(character)
+		lock_in_button.disabled = false
+		wait_before_acting_slider.value = characters_wait_before_acting_cache.get(character)
+	else:
+		set_available_actions(character.get_available_actions())
+	
 	populate_action_buttons()
+	
+	if character_seen:
+		update_available_modifiers(focused_action)
+	
 	action_chosen.connect(character.action_selected)
 	action_focused.connect(character.action_focused)
 	last_character = character
+
+func clear_caches() -> void:
+	characters_actions_cache.clear()
+	characters_focused_actions_cache.clear()
+	characters_wait_before_acting_cache.clear()
 
 func set_available_actions(actions: Dictionary[String, ActionArray]) -> void:
 	available_actions = {}
@@ -107,12 +132,13 @@ func switch_updated(switch_title: String, value: bool) -> void:
 
 ## is called by buttons to notify the interface that one has been clicked. should open up options and switches and stuff.
 func _action_pressed(pressed_action: Action) -> void:
-	lock_in_button.disabled = false
-	focused_action = pressed_action
-	focused_action.reset_target()
-	update_available_modifiers(pressed_action)
+	if focused_action != pressed_action:
+		lock_in_button.disabled = false
+		focused_action = pressed_action
+		focused_action.reset_target()
+		action_focused.emit(focused_action)
 	
-	action_focused.emit(focused_action)
+	update_available_modifiers(focused_action)
 
 func update_available_modifiers(action: Action) -> void:
 	if not action.choices.is_empty():
@@ -155,7 +181,7 @@ func _on_lock_in_button_pressed() -> void:
 		action_chosen.emit(
 			SequentialAction.create(focused_action.action_name, ActionArray.create([WaitAction.create(int(wait_before_acting_slider.value)), focused_action]))
 			)
-		lock_in_button.disabled = true
+		action_locked.emit(last_character)
 		for node: Node in actions_container.get_children():
 			if node is BaseButton:
 				node.disabled = true

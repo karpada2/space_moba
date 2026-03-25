@@ -15,7 +15,6 @@ var action_chooser_character_switchers_group: ButtonGroup = create_action_choose
 var action_choosing_interface: ActionChoosingInterface
 var action_choosing_character_switchers_container: HBoxContainer
 
-
 func _physics_process(_delta: float) -> void:
 	if is_choosing_now():
 		action_choosing_interface.last_character.action_choosing_advance()
@@ -26,8 +25,15 @@ func create_action_chooser_character_switcher_button_group() -> ButtonGroup:
 	temp.allow_unpress = false
 	return temp
 
+func _action_locked(character: CharacterBase) -> void:
+	pass
+
 func start_choosing(team: Enums.Team) -> void:
+	if not action_choosing_interface.action_locked.is_connected(_action_locked):
+		action_choosing_interface.action_locked.connect(_action_locked)
 	_in_choosing_phase = true
+	
+	action_choosing_interface.clear_caches()
 	
 	has_chosen.clear()
 	current_choosing_team_characters = GameRoot.get_game_root().get_characters_in_team(team)

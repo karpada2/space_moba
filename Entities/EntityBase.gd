@@ -22,7 +22,7 @@ class BaseMoveAction extends Action:
 		var new_action: BaseMoveAction = BaseMoveAction.new()
 		var path_length: float = 0
 		new_action.my_entity = entity
-		new_action.action_name = "Move"
+		new_action.action_name = entity.get_display_name()
 		new_action.move_distance_per_frame = move_distance_per_frame_in
 		new_action.action_length_turns = 1
 		new_action.target_type = TargetingType.POSITION

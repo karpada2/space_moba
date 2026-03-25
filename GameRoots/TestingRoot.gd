@@ -6,6 +6,7 @@ var characters_by_team: Dictionary[Enums.Team, CharacterArray] = {}
 
 @onready var action_choosing_interface: ActionChoosingInterface = $ActionChoosers/VBoxContainer/ActionChoosingInterface
 @onready var action_choosing_character_switchers_container: HBoxContainer = $ActionChoosers/VBoxContainer/ActionChoosingCharacterSwitchers
+@onready var minimap: Minimap = $Minimaps/Minimap
 
 func _ready() -> void:
 	super()
@@ -46,8 +47,10 @@ func advance_turn_phase() -> void:
 	current_turn_phase = current_turn_phase.get_next()
 	if (current_turn_phase.is_choose_phase()):
 		TurnChoosingManager.start_choosing(current_turn_phase.get_team())
+		minimap.my_team = current_turn_phase.get_team()
 	else:
 		TurnResolutionManager.resolution_start(current_turn_phase.get_team())
+		minimap.my_team = current_turn_phase.get_team()
 
 func get_all_visible_characters(team: Enums.Team) -> Array[CharacterBase]:
 	var current_teams_characters: Array[CharacterBase] = get_characters_in_team(team)
