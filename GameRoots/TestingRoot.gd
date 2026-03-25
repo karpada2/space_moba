@@ -3,39 +3,7 @@ class_name TestingRoot
 
 var characters_by_team: Dictionary[Enums.Team, CharacterArray] = {}
 @onready var action_choosing_interface: ActionChoosingInterface = $ActionChoosers/ActionChoosingInterface
-
-var wait_action: PlayerAction = PlayerAction.create(
-	"wait",
-	1,
-	PlayerAction.TargetingType.NONE,
-	{},
-	["how", "are", "you"],
-	"realTest"
-)
-
-var move_action: PlayerAction = PlayerAction.create(
-	"move",
-	2,
-	PlayerAction.TargetingType.POSITION,
-	{
-		"test1": false,
-		"test2": true
-	},
-	[],
-	""
-)
-
-var attack_action: PlayerAction = PlayerAction.create(
-	"attack",
-	1,
-	PlayerAction.TargetingType.ENEMY,
-	{
-		"more test": false,
-		"a lot more test": false
-	},
-	["i am", "making", "game"],
-	"anotherTest"
-)
+@onready var navigation_region_2d: NavigationRegion2D = $NavigationRegion2D
 
 func _ready() -> void:
 	super()
@@ -45,16 +13,7 @@ func _ready() -> void:
 
 func resolution_started(team: Enums.Team) -> void:
 	print(Enums.Team.find_key(team))
-	if team == Enums.Team.GOOD:
-		var action_array: PlayerActionArray = PlayerActionArray.new()
-		action_array.array.append_array([wait_action, attack_action])
-		action_choosing_interface.set_available_actions({"huh": action_array})
-		action_choosing_interface.populate_action_buttons()
-	else:
-		var action_array: PlayerActionArray = PlayerActionArray.new()
-		action_array.array.append_array([wait_action, move_action])
-		action_choosing_interface.set_available_actions({"huh": action_array})
-		action_choosing_interface.populate_action_buttons()
+	action_choosing_interface.set_character(get_characters_in_team(team)[0])
 	
 	get_tree().call_group("Characters", "unreveal")
 	for node: Node in get_tree().get_nodes_in_group("Characters"):

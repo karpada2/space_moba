@@ -4,7 +4,7 @@ signal resolution_started(resolving_team: Enums.Team)
 signal resolution_ended()
 signal resolution_advance(resolving_team: Enums.Team, frame_count_of_turn: int)
 
-const FRAMES_PER_TURN: int = 240
+const FRAMES_PER_TURN: int = 480
 @export var _current_team: Enums.Team = Enums.Team.GOOD
 
 var _is_resolving: bool = true

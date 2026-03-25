@@ -3,11 +3,14 @@
 [ext_resource type="Script" uid="uid://22kxym01yrfr" path="res://HUD/ActionChoosing/ActionChoosingInterface.gd" id="1_5almq"]
 
 [node name="ActionChoosingInterface" type="VBoxContainer"]
-anchors_preset = 2
+anchors_preset = 12
 anchor_top = 1.0
+anchor_right = 1.0
 anchor_bottom = 1.0
 offset_top = -4.0
+grow_horizontal = 2
 grow_vertical = 0
+size_flags_vertical = 3
 alignment = 2
 script = ExtResource("1_5almq")
 metadata/_custom_type_script = "uid://22kxym01yrfr"
@@ -30,5 +33,44 @@ layout_mode = 2
 visible = false
 layout_mode = 2
 
+[node name="WaitBeforeContainer" type="VBoxContainer" parent="ModifiersContainer"]
+layout_mode = 2
+
+[node name="SliderName" type="Label" parent="ModifiersContainer/WaitBeforeContainer"]
+layout_mode = 2
+text = "Idle Frames Before Acting"
+
+[node name="HSlider" type="HSlider" parent="ModifiersContainer/WaitBeforeContainer"]
+layout_mode = 2
+rounded = true
+tick_count = 2
+ticks_on_borders = true
+
+[node name="MarginContainer" type="MarginContainer" parent="ModifiersContainer/WaitBeforeContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_right = 5
+
+[node name="MinValueShowcase" type="Label" parent="ModifiersContainer/WaitBeforeContainer/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "0"
+
+[node name="CurrentValueShowcase" type="Label" parent="ModifiersContainer/WaitBeforeContainer/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "50"
+
+[node name="MaxValueShowcase" type="Label" parent="ModifiersContainer/WaitBeforeContainer/MarginContainer"]
+custom_minimum_size = Vector2(20, 0)
+layout_mode = 2
+size_flags_horizontal = 8
+text = "100"
+
 [node name="ActionsContainer" type="HBoxContainer" parent="."]
 layout_mode = 2
+
+[node name="LockInButton" type="Button" parent="ActionsContainer"]
+layout_mode = 2
+disabled = true
+text = "Lock In"
