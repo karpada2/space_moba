@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://b5w3iujlul5bw"]
+[gd_scene load_steps=18 format=3 uid="uid://b5w3iujlul5bw"]
 
 [ext_resource type="Texture2D" uid="uid://dc88ec5wny1rk" path="res://icon.svg" id="1_4kfho"]
 [ext_resource type="Script" uid="uid://cgkkjj6gisfb1" path="res://GameRoots/TestingRoot.gd" id="1_m46vn"]
@@ -126,6 +126,9 @@ resource_local_to_scene = true
 shader = SubResource("Shader_54qov")
 shader_parameter/mix_amount = 0.0
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hrkw6"]
+bg_color = Color(0.099985994, 0.09998601, 0.099985965, 1)
+
 [node name="TestingRoot" type="Node2D"]
 light_mask = 7
 visibility_layer = 7
@@ -191,7 +194,7 @@ my_team = 1
 
 [node name="EarthCharacter4" parent="Characters" groups=["VisibleEntities"] instance=ExtResource("4_so4lt")]
 material = SubResource("ShaderMaterial_h4lio")
-position = Vector2(888, 218)
+position = Vector2(-120, 490)
 my_team = 2
 
 [node name="ControllableCamera" type="Camera2D" parent="."]
@@ -206,15 +209,15 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -64.0
-offset_top = -64.0
+offset_left = -128.0
+offset_top = -128.0
 grow_horizontal = 0
 grow_vertical = 0
 texture = ExtResource("1_4kfho")
 expand_mode = 1
 stretch_mode = 5
 script = ExtResource("4_m46vn")
-mini_map_binding_box = Vector2(64, 64)
+mini_map_binding_box = Vector2(128, 128)
 my_team = 1
 metadata/_custom_type_script = "uid://dtd6pqcc4vcqg"
 
@@ -223,9 +226,38 @@ metadata/_custom_type_script = "uid://dtd6pqcc4vcqg"
 [node name="VBoxContainer" type="VBoxContainer" parent="ActionChoosers"]
 offset_right = 40.0
 offset_bottom = 40.0
+scale = Vector2(0.5, 0.5)
 
 [node name="ActionChoosingCharacterSwitchers" type="HBoxContainer" parent="ActionChoosers/VBoxContainer"]
 layout_mode = 2
 
 [node name="ActionChoosingInterface" parent="ActionChoosers/VBoxContainer" instance=ExtResource("5_m46vn")]
 layout_mode = 2
+
+[node name="BetweenPlayersBlocker" type="CanvasLayer" parent="."]
+layer = 2
+visible = false
+
+[node name="Panel" type="Panel" parent="BetweenPlayersBlocker"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_hrkw6")
+
+[node name="Label" type="Label" parent="BetweenPlayersBlocker/Panel"]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -11.5
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 38
+text = "NEXT PLAYER'S TURN
+PRESS ANY BUTTON TO CONTINUE"
+horizontal_alignment = 1
+vertical_alignment = 1

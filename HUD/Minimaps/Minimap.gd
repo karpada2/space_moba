@@ -39,13 +39,13 @@ func update_character_icons() -> void:
 	
 	controllable_camera = GameRoot.get_game_root().get_camera()
 	
-	for character: CharacterBase in GameRoot.get_game_root().get_all_characters():
+	for character: CharacterBase in GameRoot.get_game_root().get_all_characters(false, false):
 		var texture_rect: TextureRect = TextureRect.new()
 		texture_rect.texture = preload("res://HUD/Minimaps/Icons/EarthIcon.png")
 		texture_rect.visible = false
 		texture_rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		texture_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-		texture_rect.size = Vector2(4, 4)
+		texture_rect.size = Vector2(24, 24)*(mini_map_binding_box/Vector2(256,256))
 		characters_with_relevant_icons.set(character, texture_rect)
 		add_child.call_deferred(texture_rect)
 

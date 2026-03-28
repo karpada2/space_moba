@@ -15,6 +15,10 @@ alignment = 2
 script = ExtResource("1_5almq")
 metadata/_custom_type_script = "uid://22kxym01yrfr"
 
+[node name="LengthDisplay" type="Label" parent="."]
+layout_mode = 2
+text = "Action Length [Turns]: "
+
 [node name="ModifiersContainer" type="HBoxContainer" parent="."]
 layout_mode = 2
 

@@ -19,6 +19,7 @@ var characters_wait_before_acting_cache: Dictionary[CharacterBase, int] = {}
 @onready var min_slider_value_showcase: Label = $ModifiersContainer/WaitBeforeContainer/MarginContainer/MinValueShowcase
 @onready var max_slider_value_showcase: Label = $ModifiersContainer/WaitBeforeContainer/MarginContainer/MaxValueShowcase
 @onready var current_slider_value_showcase: Label = $ModifiersContainer/WaitBeforeContainer/MarginContainer/CurrentValueShowcase
+@onready var length_display: Label = $LengthDisplay
 
 var lock_in_button: Button
 
@@ -35,9 +36,13 @@ func _ready() -> void:
 
 func _physics_process(_delta: float) -> void:
 	if focused_action:
-		wait_before_acting_slider.max_value = TurnResolutionManager.FRAMES_PER_TURN - last_character.create_wait_and_move_action(focused_action, 0).get_action_length_frames()
+		if focused_action.is_configured():
+			wait_before_acting_slider.max_value = TurnResolutionManager.FRAMES_PER_TURN*focused_action.action_length_turns - last_character.create_wait_and_move_action(focused_action, 0).get_action_length_frames()
+		else:
+			wait_before_acting_slider.max_value = TurnResolutionManager.FRAMES_PER_TURN*focused_action.action_length_turns - focused_action.get_action_length_frames()
 		max_slider_value_showcase.text = str(int(wait_before_acting_slider.max_value))
 		current_slider_value_showcase.text = str(int(wait_before_acting_slider.value))
+		length_display.text = "Action Length [Turns]: " + str(focused_action.action_length_turns)
 
 func set_lock_in_button(new_button: Button) -> void:
 	if lock_in_button != null and lock_in_button.pressed.is_connected(_on_lock_in_button_pressed):

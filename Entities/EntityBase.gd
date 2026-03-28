@@ -76,6 +76,7 @@ class BaseMoveAction extends Action:
 	func run(_frames_passed: int) -> bool:
 		var translation_vector: Vector2 = (get_next_path_position() - my_entity.global_position)
 		translation_vector = translation_vector.limit_length(move_distance_per_frame)
+		my_entity.global_rotation = translation_vector.angle()
 		my_entity.translate(translation_vector)
 		finished = is_target_reached()
 		return not is_target_reached()
@@ -136,6 +137,9 @@ func reveal() -> void
 @abstract
 func unreveal() -> void
 
+@abstract
+func died() -> void
+
 func _ready() -> void:
 	if my_team == Enums.Team.NONE:
 		set_collision_layer_value(2, true)
@@ -162,6 +166,7 @@ func _ready() -> void:
 	hurtbox_component.my_team = self.my_team
 	getting_hit_manager.health_component = self.health_component
 	getting_hit_manager.hurtbox_component = self.hurtbox_component
+	health_component.died.connect(died)
 
 @abstract
 func get_move_distance_per_frame() -> float

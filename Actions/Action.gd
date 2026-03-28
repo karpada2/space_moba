@@ -27,7 +27,7 @@ var action_name: String
 ## how long the action takes.[br]
 ## should be written to and read from.
 var action_length_turns: int
-
+var action_length_used: int = 0
 
 ## holds the targeting type for this action.[br]
 ## should only be written to.

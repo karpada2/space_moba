@@ -32,6 +32,9 @@ func start_choosing(team: Enums.Team) -> void:
 	
 	has_chosen.clear()
 	current_choosing_team_characters = GameRoot.get_game_root().get_characters_in_team(team)
+	if current_choosing_team_characters.size() == 0:
+		choosing_start.emit(team)
+		return
 	current_choosing_team = team
 	
 	for character: CharacterBase in current_choosing_team_characters:

@@ -60,7 +60,7 @@ func center_camera_on_interest(team: Enums.Team) -> void:
 	var average_vector: Vector2 = Vector2.ZERO
 	var size_vector: Vector2 = Vector2.ZERO
 	var valid_flag: bool = true
-	var alive_characters: Array[CharacterBase] = GameRoot.get_game_root().get_characters_in_team(team).filter(func(c: CharacterBase) -> bool: return c.is_alive())
+	var alive_characters: Array[CharacterBase] = GameRoot.get_game_root().get_characters_in_team(team)
 	if alive_characters.size() > 1:
 		for character: CharacterBase in alive_characters:
 			average_vector += (character.global_position / alive_characters.size())

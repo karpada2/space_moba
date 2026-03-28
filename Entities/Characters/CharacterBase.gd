@@ -3,14 +3,17 @@ extends EntityBase
 class_name CharacterBase
 
 
+signal request_revive(character: CharacterBase)
+
+
+var respawn_countdown: int = 0
+
 var detection_area: DetectionAreaComponent
 var navigation_agent: NavigationAgent2D
 @onready var target_visualizer: TargetVisualizer = $TargetVisualizer
 @onready var target_chooser: TargetChooser = $TargetChooser
-@onready var health_bar_and_name_display: HealthBarAndNameDisplay = $HealthBarAndNameDisplay
-
-static var position_targeting_color: Color = Color(1.0, 0.0, 1.0, 0.2)
-const invalid_target_color: Color = Color(1.0, 0.0, 0.0, 0.3)
+@onready var health_bar_and_name_display: HealthBarAndNameDisplay = $OnPlayerGUIHolder/HealthBarOffseter/HealthBarAndNameDisplay
+@onready var health_bar_offseter: Node2D = $OnPlayerGUIHolder/HealthBarOffseter
 
 # max movement speed in pixels/seconds
 @export var move_speed_human: float = 50
@@ -52,14 +55,27 @@ func _ready() -> void:
 	
 	TurnResolutionManager.resolution_started.connect(turn_resolution_start)
 	TurnResolutionManager.resolution_advance.connect(turn_resolution_advance)
+	TurnResolutionManager.resolution_ended.connect(turn_resolution_end)
 
 func turn_resolution_start(team: Enums.Team) -> void:
 	health_bar_and_name_display.as_enemy = team != my_team
 
+func turn_resolution_end(team: Enums.Team) -> void:
+	if my_team != team and not is_alive():
+			if respawn_countdown <= 0:
+				request_revive.emit(self)
+			respawn_countdown -= 1
+	
+	if team == my_team and is_alive():
+		next_chosen_action.action_length_used += 1
+		if next_chosen_action.action_length_used >= next_chosen_action.action_length_turns:
+			next_chosen_action = null
+
 func action_choosing_start(team: Enums.Team) -> void:
 	health_bar_and_name_display.as_enemy = team != my_team
-	if my_team == team:
-		target_chooser.enable()
+	
+	if my_team == team and next_chosen_action == null and is_alive():
+			target_chooser.enable()
 
 func action_choosing_end(team: Enums.Team) -> void:
 	if my_team == team:
@@ -68,7 +84,7 @@ func action_choosing_end(team: Enums.Team) -> void:
 		target_visualizer.hide()
 
 func action_choosing_advance() -> void:
-	if current_focused_action != null:
+	if current_focused_action != null and next_chosen_action == null and is_alive():
 		if target_chooser.is_right_mouse_button_just_pressed():
 			current_focused_action.reset_target()
 		
@@ -84,7 +100,6 @@ func action_choosing_advance() -> void:
 				target_visualizer.set_target_position( current_focused_action.target_position)
 			
 			
-			
 			if target_chooser.is_left_mouse_button_just_pressed() and not current_focused_action.is_configured():
 				current_focused_action.set_target_position(target_chooser.get_mouse_target_position())
 				navigation_agent.target_position = current_focused_action.target_position
@@ -97,6 +112,8 @@ func action_choosing_advance() -> void:
 		elif current_focused_action.target_type in [Action.TargetingType.ANY, Action.TargetingType.ENEMY, Action.TargetingType.ALLY]:
 			if current_focused_action.is_configured():
 				target_visualizer.choose_enabled(true, false, true)
+				navigation_agent.target_position = current_focused_action.target_entity.global_position
+				calculate_navigation()
 			else:
 				target_visualizer.choose_enabled(true, true, false)
 				var target_entity: EntityBase = null
@@ -109,8 +126,11 @@ func action_choosing_advance() -> void:
 				
 				if target_entity:
 					target_visualizer.set_target_position(target_entity.global_position)
+					navigation_agent.target_position = target_entity.global_position
 				else:
 					target_visualizer.set_target_position(target_chooser.get_mouse_target_position())
+					navigation_agent.target_position = target_chooser.get_mouse_target_position()
+				calculate_navigation()
 			
 			if target_chooser.is_left_mouse_button_just_pressed() and not current_focused_action.is_configured():
 				if current_focused_action.target_type == Action.TargetingType.ANY:
@@ -123,31 +143,57 @@ func action_choosing_advance() -> void:
 				if current_focused_action.is_configured():
 					if not is_action_possible(current_focused_action):
 						current_focused_action.reset_target()
-				
-				if current_focused_action.is_configured():
-					target_visualizer.set_target_entity(current_focused_action.target_entity)
-			
-			target_visualizer.is_valid = is_action_possible(current_focused_action)
+					else:
+						target_visualizer.set_target_entity(current_focused_action.target_entity)
+						navigation_agent.target_position = current_focused_action.target_entity.global_position
+						calculate_navigation()
 		else:
 			target_visualizer.choose_enabled()
 
 func _on_move_path_changed() -> void:
-	if current_focused_action is EntityBase.BaseMoveAction:
-		target_visualizer.set_line_points(navigation_agent.get_current_navigation_path())
-	else:
-		target_visualizer.set_line_points(optimize_move_path(navigation_agent.get_current_navigation_path(), get_action_range(current_focused_action), navigation_agent.target_position))
+	target_visualizer.set_line_points(navigation_agent.get_current_navigation_path())
+
+func died() -> void:
+	unreveal()
+	health_bar_offseter.hide()
+	target_visualizer.hide()
+	target_chooser.disable()
+	hurtbox_component.monitoring = false
+	hurtbox_component.monitorable = false
+	hurtbox_component.visible = false
+	respawn_countdown = 2
+
+func revive(revive_location: Vector2, health_percent: float = 1.0) -> void:
+	reveal()
+	health_bar_offseter.show()
+	target_visualizer.show()
+	hurtbox_component.monitoring = true
+	hurtbox_component.monitorable = true
+	hurtbox_component.visible = true
+	health_component.heal(health_component.max_health * health_percent)
+	global_position = revive_location
+	respawn_countdown = 0
+
+func kill() -> void:
+	health_component.deal_damage(health_component.max_health * 999)
 
 func enable() -> void:
 	show()
 	detection_area.enable()
 
+func disable() -> void:
+	hide()
+	detection_area.disable()
+
 func reveal() -> void:
 	show()
+	health_bar_offseter.show()
 
 func unreveal() -> void:
-	self.hide()
+	hide()
 	detection_area.disable()
 	target_visualizer.hide()
+	health_bar_offseter.hide()
 
 func reveal_visible_enemies() -> void:
 	self.show()
@@ -160,7 +206,7 @@ func get_visible_enemies() -> Array[CharacterBase]:
 	return detection_area.get_visible_enemies()
 
 func turn_resolution_advance(resolving_team: Enums.Team, frame_count: int) -> void:
-	if resolving_team == my_team:
+	if resolving_team == my_team and is_alive():
 		if ready_to_act:
 			ready_to_act = next_chosen_action.run(frame_count)
 
@@ -210,6 +256,9 @@ func create_wait_and_move_action(action: Action, wait_before_act: int) -> Sequen
 			navigation_agent.target_position = action.target_entity.global_position
 		else:
 			navigation_agent.target_position = self.global_position
+	
+	if navigation_agent.target_position.distance_to(global_position) < get_action_range(action):
+		return SequentialAction.create(action.action_name, ActionArray.create([WaitAction.create(wait_before_act), action]))
 	calculate_navigation()
 	
 	var path: PackedVector2Array = optimize_move_path(navigation_agent.get_current_navigation_path(), get_action_range(action), navigation_agent.target_position)
@@ -237,10 +286,11 @@ func get_max_movement_distance_possible() -> float:
 
 ## Handles storing what action was selected and with what parameters
 func action_selected(chosen_action: Action, wait_before_act: int) -> void:
-	next_chosen_action = create_wait_and_move_action(chosen_action, wait_before_act)
+	if next_chosen_action == null:
+		ready_to_act = true
+		next_chosen_action = create_wait_and_move_action(chosen_action, wait_before_act)
+		target_chooser.enabled = false
 	TurnChoosingManager.i_chose_action(self)
-	ready_to_act = true
-	target_chooser.enabled = false
 
 func is_alive() -> bool:
-	return health_component.curr_health > 0
+	return health_component.is_alive

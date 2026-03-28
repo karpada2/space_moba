@@ -27,7 +27,6 @@ motion_mode = 1
 script = ExtResource("1_oofe1")
 move_speed_human = 200.0
 attack_range = 275.0
-my_team = null
 metadata/_custom_type_script = "uid://cckinmhmx0uvy"
 
 [node name="Sprite" type="Sprite2D" parent="."]
@@ -38,6 +37,8 @@ texture = ExtResource("2_symtk")
 
 [node name="HealthComponent" type="Node" parent="."]
 script = ExtResource("3_0y17a")
+max_health = 100.0
+curr_health = 100.0
 metadata/_custom_type_script = "uid://dsopyue7txr2b"
 
 [node name="GettingHitManagerComponent" type="Node" parent="."]
@@ -74,7 +75,14 @@ shape = SubResource("CapsuleShape2D_symtk")
 position_visualization_image = ExtResource("9_7rs7k")
 entity_visualization_image = SubResource("CompressedTexture2D_bk6up")
 
-[node name="HealthBarAndNameDisplay" parent="." node_paths=PackedStringArray("health_component") instance=ExtResource("10_7rs7k")]
-position = Vector2(0, -86)
-display_name = "Earth"
-health_component = NodePath("../HealthComponent")
+[node name="RemoteTransform2D" type="RemoteTransform2D" parent="."]
+remote_path = NodePath("../OnPlayerGUIHolder/HealthBarOffseter")
+update_rotation = false
+
+[node name="OnPlayerGUIHolder" type="Node" parent="."]
+
+[node name="HealthBarOffseter" type="Node2D" parent="OnPlayerGUIHolder"]
+
+[node name="HealthBarAndNameDisplay" parent="OnPlayerGUIHolder/HealthBarOffseter" node_paths=PackedStringArray("health_component") instance=ExtResource("10_7rs7k")]
+position = Vector2(0, -112)
+health_component = NodePath("../../../HealthComponent")

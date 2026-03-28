@@ -1,7 +1,7 @@
 extends Node
 
 signal resolution_started(resolving_team: Enums.Team)
-signal resolution_ended()
+signal resolution_ended(resolving_team: Enums.Team)
 signal resolution_advance(resolving_team: Enums.Team, frame_count_of_turn: int)
 
 const FRAMES_PER_TURN: int = 160
@@ -32,4 +32,4 @@ func get_resolving_team() -> Enums.Team:
 func resolution_end() -> void:
 	frame_counter = 0
 	_is_resolving = false
-	resolution_ended.emit()
+	resolution_ended.emit(_current_team)
