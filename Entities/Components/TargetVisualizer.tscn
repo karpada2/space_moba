@@ -1,0 +1,34 @@
+[gd_scene load_steps=6 format=3 uid="uid://b11b2nrejvoal"]
+
+[ext_resource type="Script" uid="uid://d4mc8qb7ua02b" path="res://Entities/Components/TargetVisualizer.gd" id="1_d1hlm"]
+[ext_resource type="Shader" uid="uid://d3uh0u10xik42" path="res://Entities/Components/TargetVisualizer.gdshader" id="1_nl50s"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_nl50s"]
+resource_local_to_scene = true
+shader = ExtResource("1_nl50s")
+shader_parameter/mix_amount = 0.5
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_31g7v"]
+resource_local_to_scene = true
+shader = ExtResource("1_nl50s")
+shader_parameter/mix_amount = 0.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_42fjn"]
+resource_local_to_scene = true
+shader = ExtResource("1_nl50s")
+shader_parameter/mix_amount = 0.0
+
+[node name="TargetVisualizer" type="CanvasLayer"]
+follow_viewport_enabled = true
+script = ExtResource("1_d1hlm")
+
+[node name="LineVisualizer" type="Line2D" parent="."]
+material = SubResource("ShaderMaterial_nl50s")
+
+[node name="PositionVisualizer" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_31g7v")
+scale = Vector2(8, 8)
+
+[node name="EntityVisualizer" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_42fjn")
+scale = Vector2(8, 8)

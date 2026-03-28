@@ -3,9 +3,9 @@
 [ext_resource type="Script" uid="uid://d3jrlxrb372sb" path="res://Entities/Components/TargetChooser.gd" id="1_3d7hu"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_3d7hu"]
-radius = 250.0
+radius = 60.0
 
-[node name="TargetChooser" type="Node"]
+[node name="TargetChooser" type="CanvasLayer"]
 script = ExtResource("1_3d7hu")
 
 [node name="EntityDetector" type="Area2D" parent="."]

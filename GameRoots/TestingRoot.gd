@@ -81,3 +81,6 @@ func get_characters_in_team(team: Enums.Team) -> Array[CharacterBase]:
 		return get_all_characters()
 	get_all_characters()
 	return characters_by_team.get(team).array
+
+func get_camera() -> ControllableCamera:
+	return $ControllableCamera

@@ -20,6 +20,9 @@ static func get_game_root() -> GameRoot:
 @abstract
 func get_all_visible_characters(team: Enums.Team) -> Array[CharacterBase]
 
+@abstract 
+func get_camera() -> ControllableCamera
+
 func reveal_as_needed(team: Enums.Team) -> void:
 	var all_characters: Array[CharacterBase] = get_all_characters()
 	

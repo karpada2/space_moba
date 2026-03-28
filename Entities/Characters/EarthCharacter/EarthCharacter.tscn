@@ -1,6 +1,5 @@
-[gd_scene load_steps=11 format=3 uid="uid://k3mslpvijhds"]
+[gd_scene load_steps=13 format=3 uid="uid://k3mslpvijhds"]
 
-[ext_resource type="Shader" uid="uid://6kwpnb0kq428" path="res://Entities/EntityShader.gdshader" id="1_3nsai"]
 [ext_resource type="Script" uid="uid://cckinmhmx0uvy" path="res://Entities/Characters/EarthCharacter/EarthCharacter.gd" id="1_oofe1"]
 [ext_resource type="Texture2D" uid="uid://dddmxxuasemfw" path="res://Entities/Characters/EarthCharacter/EarthSprite.png" id="2_symtk"]
 [ext_resource type="Script" uid="uid://dsopyue7txr2b" path="res://Entities/Components/HealthComponent.gd" id="3_0y17a"]
@@ -8,26 +7,27 @@
 [ext_resource type="Script" uid="uid://b5uttgqqjgqly" path="res://Entities/Components/HurtboxComponent.gd" id="5_h1xd8"]
 [ext_resource type="PackedScene" uid="uid://cr32u8kaclsx1" path="res://Entities/Components/TargetChooser.tscn" id="7_3nsai"]
 [ext_resource type="PackedScene" uid="uid://cg8sovak1nglu" path="res://Entities/Components/DetectionAreaComponent.tscn" id="7_h1xd8"]
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_5dj41"]
-resource_local_to_scene = true
-shader = ExtResource("1_3nsai")
-shader_parameter/mix_amount = 0.0
+[ext_resource type="PackedScene" uid="uid://b11b2nrejvoal" path="res://Entities/Components/TargetVisualizer.tscn" id="9_5dj41"]
+[ext_resource type="Texture2D" uid="uid://wu6kq74xu18v" path="res://HUD/ActionChoosing/selection_indicator.png" id="9_7rs7k"]
+[ext_resource type="PackedScene" uid="uid://br02qe1fncgmy" path="res://HUD/EntityStuff/HealthAndStats/HealthBarAndNameDisplay.tscn" id="10_7rs7k"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_symtk"]
 radius = 28.0
 height = 90.0
 
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_bk6up"]
+load_path = "res://.godot/imported/selection_indicator.png-930042b05fd7e25f41abf9af758c9242.ctex"
+
 [node name="EarthCharacter" type="CharacterBody2D" groups=["Characters"]]
 light_mask = 7
 visibility_layer = 7
-material = SubResource("ShaderMaterial_5dj41")
 collision_layer = 0
 collision_mask = 0
 motion_mode = 1
 script = ExtResource("1_oofe1")
 move_speed_human = 200.0
 attack_range = 275.0
+my_team = null
 metadata/_custom_type_script = "uid://cckinmhmx0uvy"
 
 [node name="Sprite" type="Sprite2D" parent="."]
@@ -68,16 +68,13 @@ shape = SubResource("CapsuleShape2D_symtk")
 
 [node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
 
-[node name="MovePathVisualizer" type="Line2D" parent="."]
-visible = false
-top_level = true
-default_color = Color(1, 0, 1, 0.047058824)
-
-[node name="PositionSelectIndicator" type="Polygon2D" parent="."]
-visible = false
-top_level = true
-scale = Vector2(9.03, 9.03)
-color = Color(1, 0, 1, 0.047058824)
-polygon = PackedVector2Array(8.66, 6, 8.66, -5, 0, -10, -8.66, -5, -8.66, 5, 0, 10)
-
 [node name="TargetChooser" parent="." instance=ExtResource("7_3nsai")]
+
+[node name="TargetVisualizer" parent="." instance=ExtResource("9_5dj41")]
+position_visualization_image = ExtResource("9_7rs7k")
+entity_visualization_image = SubResource("CompressedTexture2D_bk6up")
+
+[node name="HealthBarAndNameDisplay" parent="." node_paths=PackedStringArray("health_component") instance=ExtResource("10_7rs7k")]
+position = Vector2(0, -86)
+display_name = "Earth"
+health_component = NodePath("../HealthComponent")

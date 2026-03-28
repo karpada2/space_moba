@@ -4,6 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://dc88ec5wny1rk" path="res://icon.svg" id="1_odjjw"]
 
 [node name="Minimap" type="TextureRect"]
+clip_contents = true
 anchors_preset = -1
 anchor_right = 0.22200002
 anchor_bottom = 0.395
@@ -12,3 +13,6 @@ offset_bottom = 0.039993286
 texture = ExtResource("1_odjjw")
 expand_mode = 1
 script = ExtResource("1_fd6n6")
+full_map_binding_box = null
+mini_map_binding_box = null
+my_team = null

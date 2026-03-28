@@ -84,9 +84,6 @@ class BaseMoveAction extends Action:
 class BaseAttackAction extends Action:
 	var attack: Attack
 	
-	func target_set() -> void:
-		target_entity.material.set("shader_parameter/mix_amount", 0.5)
-	
 	func get_action_length_frames() -> int:
 		return 0
 	
@@ -111,7 +108,6 @@ class BaseAttackAction extends Action:
 	
 	func run(_frames_passed: int) -> bool:
 		target_entity.getting_hit_manager.attack(attack)
-		target_entity.material.set("shader_parameter/mix_amount", 0)
 		return false
 
 @export var my_team: Enums.Team = Enums.Team.NONE
@@ -169,3 +165,6 @@ func _ready() -> void:
 
 @abstract
 func get_move_distance_per_frame() -> float
+
+@abstract
+func is_alive() -> bool

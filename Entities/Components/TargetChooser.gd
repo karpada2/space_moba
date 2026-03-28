@@ -1,4 +1,4 @@
-extends Node
+extends CanvasLayer
 class_name TargetChooser
 
 
@@ -6,7 +6,10 @@ class_name TargetChooser
 
 @export var my_team: Enums.Team = Enums.Team.GOOD
 
-var enabled: bool = false
+var enabled: bool = false:
+	set(value):
+		visible = value
+		enabled = value
 
 var overlapping_entities: Array[EntityBase] = []
 
@@ -22,6 +25,13 @@ func _on_entity_detector_body_exited(body: Node2D) -> void:
 func _physics_process(_delta: float) -> void:
 	if enabled:
 		entity_detector.global_position = _get_global_mouse_position()
+
+
+func disable() -> void:
+	enabled = false
+
+func enable() -> void:
+	enabled = true
 
 
 func _get_global_mouse_position() -> Vector2:
