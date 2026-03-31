@@ -15,7 +15,7 @@ class BaseMoveAction extends Action:
 	func get_action_length_frames() -> int:
 		if navigation_agent != null:
 			navigation_agent.is_target_reachable()
-			navigation_total_time = int(navigation_agent.get_path_length()/self.move_distance_per_frame)+1
+			navigation_total_time = int(ceilf(navigation_agent.get_path_length()/self.move_distance_per_frame))
 		return navigation_total_time
 	
 	static func create(entity: EntityBase, move_distance_per_frame_in: float, navigation_agent_in: NavigationAgent2D = null, move_path: PackedVector2Array = [], position_tolerance: float = 0) -> BaseMoveAction:
@@ -81,6 +81,16 @@ class BaseMoveAction extends Action:
 		finished = is_target_reached()
 		return not is_target_reached()
 
+class NullBaseMoveAction extends BaseMoveAction:
+	func get_action_length_frames() -> int:
+		return 0
+	
+	static func actual_create() -> BaseMoveAction:
+		return NullBaseMoveAction.new()
+	
+	func run(_frames_passed: int) -> bool:
+		return false
+
 ## applies the attack only, combined with an animation action before and after to achieve cool effect. this way multi-hit-attacks and shit also work.
 class BaseAttackAction extends Action:
 	var attack: Attack
@@ -108,7 +118,8 @@ class BaseAttackAction extends Action:
 		return BaseAttackAction.new()
 	
 	func run(_frames_passed: int) -> bool:
-		target_entity.getting_hit_manager.attack(attack)
+		if target_entity:
+			target_entity.getting_hit_manager.attack(attack)
 		return false
 
 @export var my_team: Enums.Team = Enums.Team.NONE
@@ -131,11 +142,48 @@ func get_display_name() -> String:
 		set_display_name(self.name)
 	return _display_name
 
+func optimize_move_path(path_in: PackedVector2Array, wanted_distance: float, target_position: Vector2) -> PackedVector2Array:
+	var path: PackedVector2Array = path_in.duplicate()
+	if path.size() >= 2:
+		var index_flag: bool = false
+		var index: int
+		if path.size() > 2:
+			for i: int in range(path.size() - 1, 1, -1):
+				if path[i].distance_to(target_position) < wanted_distance and path[i-1].distance_to(target_position) > wanted_distance:
+					index = i
+					index_flag = true
+					break
+		else:
+			index = 1
+			index_flag = true
+		if index_flag:
+			var diff_between_last: Vector2 = path[index] - path[index-1]
+			var multiplier: float = 0.5
+			for i: int in range(2, 8, 1):
+				if (path[index-1] + (multiplier * diff_between_last)).distance_to(target_position) > wanted_distance:
+					multiplier += pow(2, -i)
+				else:
+					multiplier -= pow(2, -i)
+			var resulting_vector: Vector2 = path[index-1] + (multiplier * diff_between_last)
+			if path.size() == 2:
+				path = [path[0], resulting_vector]
+			else:
+				path = path.slice(0, index)
+				path.append(resulting_vector)
+	
+	return path
+
 @abstract
 func reveal() -> void
 
 @abstract
 func unreveal() -> void
+
+@abstract
+func enable() -> void
+
+@abstract
+func disable() -> void
 
 @abstract
 func died() -> void
@@ -172,4 +220,10 @@ func _ready() -> void:
 func get_move_distance_per_frame() -> float
 
 @abstract
-func is_alive() -> bool
+func get_visible_enemies() -> Array[EntityBase]
+
+func _calculate_navigation(nav_agent_in: NavigationAgent2D) -> void:
+	nav_agent_in.is_target_reachable()
+
+func is_alive() -> bool:
+	return health_component.is_alive

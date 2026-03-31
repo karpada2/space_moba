@@ -12,6 +12,13 @@ static var GOOD_TEAM_CHOOSE: TurnPhase = TurnPhase._create(0, Enums.Team.GOOD)
 static var EVIL_TEAM_CHOOSE: TurnPhase = TurnPhase._create(1, Enums.Team.EVIL)
 static var GOOD_TEAM_RESOLVE: TurnPhase = TurnPhase._create(2, Enums.Team.GOOD)
 static var EVIL_TEAM_RESOLVE: TurnPhase = TurnPhase._create(3, Enums.Team.EVIL)
+static var BEFORE_START: TurnPhase = TurnPhase._create(4, Enums.Team.NULL)
+
+@warning_ignore("unused_private_class_variable")
+static var _trash_again: OrderTurnPhase = OrderTurnPhase.order([
+	BEFORE_START,
+	GOOD_TEAM_CHOOSE
+])
 
 @warning_ignore("unused_private_class_variable")
 static var _trash: OrderTurnPhase = OrderTurnPhase.order([

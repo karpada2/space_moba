@@ -38,6 +38,8 @@ enabled=PackedStringArray("res://addons/vision_cone_2d/plugin.cfg")
 [global_group]
 
 Characters=""
+Entities="All Entities (characters, minions, neutrals, towers, etc.)"
+OnEntitiesHealthbars="all healthbars, used so they don't overlap"
 
 [gui]
 

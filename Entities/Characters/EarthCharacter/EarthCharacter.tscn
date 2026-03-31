@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://k3mslpvijhds"]
+[gd_scene load_steps=12 format=3 uid="uid://k3mslpvijhds"]
 
 [ext_resource type="Script" uid="uid://cckinmhmx0uvy" path="res://Entities/Characters/EarthCharacter/EarthCharacter.gd" id="1_oofe1"]
 [ext_resource type="Texture2D" uid="uid://dddmxxuasemfw" path="res://Entities/Characters/EarthCharacter/EarthSprite.png" id="2_symtk"]
@@ -8,17 +8,13 @@
 [ext_resource type="PackedScene" uid="uid://cr32u8kaclsx1" path="res://Entities/Components/TargetChooser.tscn" id="7_3nsai"]
 [ext_resource type="PackedScene" uid="uid://cg8sovak1nglu" path="res://Entities/Components/DetectionAreaComponent.tscn" id="7_h1xd8"]
 [ext_resource type="PackedScene" uid="uid://b11b2nrejvoal" path="res://Entities/Components/TargetVisualizer.tscn" id="9_5dj41"]
-[ext_resource type="Texture2D" uid="uid://wu6kq74xu18v" path="res://HUD/ActionChoosing/selection_indicator.png" id="9_7rs7k"]
+[ext_resource type="Texture2D" uid="uid://wu6kq74xu18v" path="res://Entities/Components/selection_indicator.png" id="9_7rs7k"]
 [ext_resource type="PackedScene" uid="uid://br02qe1fncgmy" path="res://HUD/EntityStuff/HealthAndStats/HealthBarAndNameDisplay.tscn" id="10_7rs7k"]
 
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_symtk"]
-radius = 28.0
-height = 90.0
+[sub_resource type="CircleShape2D" id="CircleShape2D_7rs7k"]
+radius = 36.0
 
-[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_bk6up"]
-load_path = "res://.godot/imported/selection_indicator.png-930042b05fd7e25f41abf9af758c9242.ctex"
-
-[node name="EarthCharacter" type="CharacterBody2D" groups=["Characters"]]
+[node name="EarthCharacter" type="CharacterBody2D" groups=["Characters", "Entities"]]
 light_mask = 7
 visibility_layer = 7
 collision_layer = 0
@@ -26,7 +22,6 @@ collision_mask = 0
 motion_mode = 1
 script = ExtResource("1_oofe1")
 move_speed_human = 200.0
-attack_range = 275.0
 metadata/_custom_type_script = "uid://cckinmhmx0uvy"
 
 [node name="Sprite" type="Sprite2D" parent="."]
@@ -34,11 +29,10 @@ z_index = 2
 use_parent_material = true
 scale = Vector2(8.14, 8.14)
 texture = ExtResource("2_symtk")
+offset = Vector2(3, 0)
 
 [node name="HealthComponent" type="Node" parent="."]
 script = ExtResource("3_0y17a")
-max_health = 100.0
-curr_health = 100.0
 metadata/_custom_type_script = "uid://dsopyue7txr2b"
 
 [node name="GettingHitManagerComponent" type="Node" parent="."]
@@ -52,9 +46,7 @@ script = ExtResource("5_h1xd8")
 metadata/_custom_type_script = "uid://b5uttgqqjgqly"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HurtboxComponent"]
-position = Vector2(-4, 0)
-rotation = 1.5707964
-shape = SubResource("CapsuleShape2D_symtk")
+shape = SubResource("CircleShape2D_7rs7k")
 
 [node name="DetectionAreaComponent" parent="." instance=ExtResource("7_h1xd8")]
 range_item_cull_mask = 4
@@ -63,9 +55,7 @@ texture_scale = 8.6953125
 diameter = 2200
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(-4, 0)
-rotation = 1.5707964
-shape = SubResource("CapsuleShape2D_symtk")
+shape = SubResource("CircleShape2D_7rs7k")
 
 [node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
 
@@ -73,16 +63,14 @@ shape = SubResource("CapsuleShape2D_symtk")
 
 [node name="TargetVisualizer" parent="." instance=ExtResource("9_5dj41")]
 position_visualization_image = ExtResource("9_7rs7k")
-entity_visualization_image = SubResource("CompressedTexture2D_bk6up")
+entity_visualization_image = ExtResource("9_7rs7k")
 
 [node name="RemoteTransform2D" type="RemoteTransform2D" parent="."]
-remote_path = NodePath("../OnPlayerGUIHolder/HealthBarOffseter")
+remote_path = NodePath("../OnPlayerGUIHolder/HealthBarAndNameDisplay")
 update_rotation = false
 
 [node name="OnPlayerGUIHolder" type="Node" parent="."]
 
-[node name="HealthBarOffseter" type="Node2D" parent="OnPlayerGUIHolder"]
-
-[node name="HealthBarAndNameDisplay" parent="OnPlayerGUIHolder/HealthBarOffseter" node_paths=PackedStringArray("health_component") instance=ExtResource("10_7rs7k")]
-position = Vector2(0, -112)
-health_component = NodePath("../../../HealthComponent")
+[node name="HealthBarAndNameDisplay" parent="OnPlayerGUIHolder" node_paths=PackedStringArray("health_component") instance=ExtResource("10_7rs7k")]
+wanted_offset = Vector2(0, -112)
+health_component = NodePath("../../HealthComponent")

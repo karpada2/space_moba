@@ -31,10 +31,13 @@ func clone() -> SequentialAction:
 	return new_action
 
 func run(frames_passed: int) -> bool:
-	var return_value: bool = actions_to_be_performed.array.front().run(frames_passed)
+	var return_value: bool = true
+	if not actions_to_be_performed.array.is_empty():
+		return_value = actions_to_be_performed.array.front().run(frames_passed)
 	
 	if not return_value:
 		actions_to_be_performed.array.pop_front()
+		return_value = run(frames_passed)
 	
 	if actions_to_be_performed.array.is_empty():
 		finished = true

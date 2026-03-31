@@ -27,11 +27,13 @@ corner_radius_bottom_right = 6
 corner_radius_bottom_left = 6
 corner_detail = 6
 
-[node name="HealthBarAndNameDisplay" type="Node2D"]
+[node name="HealthBarAndNameDisplay" type="Node2D" groups=["OnEntitiesHealthbars"]]
 script = ExtResource("1_kjenk")
 as_enemy = false
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="Offset" type="Node2D" parent="."]
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Offset"]
 custom_minimum_size = Vector2(320, 50)
 anchors_preset = 7
 anchor_left = 0.5
@@ -46,15 +48,17 @@ grow_vertical = 0
 size_flags_horizontal = 4
 alignment = 2
 
-[node name="NameDisplay" type="Label" parent="VBoxContainer"]
+[node name="NameDisplay" type="Label" parent="Offset/VBoxContainer"]
+custom_minimum_size = Vector2(320, 45)
 layout_mode = 2
 label_settings = SubResource("LabelSettings_pu2mg")
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="HealthBar" type="ProgressBar" parent="VBoxContainer"]
+[node name="HealthBar" type="ProgressBar" parent="Offset/VBoxContainer"]
+custom_minimum_size = Vector2(320, 18)
 layout_mode = 2
-size_flags_vertical = 3
+size_flags_vertical = 8
 theme_override_styles/background = SubResource("StyleBoxFlat_pu2mg")
 theme_override_styles/fill = SubResource("StyleBoxFlat_mmjno")
 value = 38.64

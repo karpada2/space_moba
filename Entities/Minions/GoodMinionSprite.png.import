@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://wu6kq74xu18v"
-path="res://.godot/imported/selection_indicator.png-930042b05fd7e25f41abf9af758c9242.ctex"
+uid="uid://cttk24ydemrnv"
+path="res://.godot/imported/GoodMinionSprite.png-0d121eb319ed51ae5528120158246e42.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://HUD/ActionChoosing/selection_indicator.png"
-dest_files=["res://.godot/imported/selection_indicator.png-930042b05fd7e25f41abf9af758c9242.ctex"]
+source_file="res://Entities/Minions/GoodMinionSprite.png"
+dest_files=["res://.godot/imported/GoodMinionSprite.png-0d121eb319ed51ae5528120158246e42.ctex"]
 
 [params]
 

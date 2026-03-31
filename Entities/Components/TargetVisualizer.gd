@@ -29,18 +29,19 @@ const invalid_mix_value: float = 0.7
 	set(value):
 		if value:
 			if line_visualizer:
-				line_visualizer.material.set("shader_parameter/mix_amount", 0.0)
+				line_visualizer.material.set("shader_parameter/tint_active", false)
 			if position_visualizer:
-				position_visualizer.material.set("shader_parameter/mix_amount", 0.0)
+				position_visualizer.material.set("shader_parameter/tint_active", false)
 			if entity_visualizer:
-				entity_visualizer.material.set("shader_parameter/mix_amount", 0.0)
+				entity_visualizer.set("shader_parameter/tint_active", false)
 		else:
 			if line_visualizer:
-				line_visualizer.material.set("shader_parameter/mix_amount", invalid_mix_value)
+				line_visualizer.material.set("shader_parameter/tint_active", true)
 			if position_visualizer:
-				position_visualizer.material.set("shader_parameter/mix_amount", invalid_mix_value)
+				position_visualizer.material.set("shader_parameter/tint_active", true)
 			if entity_visualizer:
-				entity_visualizer.material.set("shader_parameter/mix_amount", invalid_mix_value)
+				entity_visualizer.material.set("shader_parameter/tint_active", true)
+		is_valid = value
 
 @export_category("Assets")
 @export var line_color: Color:
@@ -65,22 +66,22 @@ const invalid_mix_value: float = 0.7
 func _ready() -> void:
 	if line_visualizer:
 		if is_valid:
-			line_visualizer.material.set("shader_parameter/mix_amount", 0.0)
+			line_visualizer.material.set("shader_parameter/tint_active", false)
 		else:
-			line_visualizer.material.set("shader_parameter/mix_amount", invalid_mix_value)
+			line_visualizer.material.set("shader_parameter/tint_active", true)
 		line_visualizer.visible = line_visualization_enabled
 	if position_visualizer:
 		if is_valid:
-			position_visualizer.material.set("shader_parameter/mix_amount", 0.0)
+			position_visualizer.material.set("shader_parameter/tint_active", false)
 		else:
-			position_visualizer.material.set("shader_parameter/mix_amount", invalid_mix_value)
+			position_visualizer.material.set("shader_parameter/tint_active", true)
 		position_visualizer.texture = position_visualization_image
 		position_visualizer.visible = position_visualization_enabled
 	if entity_visualizer:
 		if is_valid:
-			entity_visualizer.material.set("shader_parameter/mix_amount", 0.0)
+			entity_visualizer.material.set("shader_parameter/tint_active", false)
 		else:
-			entity_visualizer.material.set("shader_parameter/mix_amount", invalid_mix_value)
+			entity_visualizer.material.set("shader_parameter/tint_active", true)
 		entity_visualizer.texture = entity_visualization_image
 		entity_visualizer.visible = entity_visualization_enabled
 

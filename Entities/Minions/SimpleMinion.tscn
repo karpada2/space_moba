@@ -1,0 +1,68 @@
+[gd_scene load_steps=10 format=3 uid="uid://dlh0xdeyosfyi"]
+
+[ext_resource type="Script" uid="uid://b3eyn2uusnbxu" path="res://Entities/Minions/Minion.gd" id="1_qs66y"]
+[ext_resource type="Shader" uid="uid://6kwpnb0kq428" path="res://Entities/EntityShader.gdshader" id="2_mfsav"]
+[ext_resource type="Script" uid="uid://dsopyue7txr2b" path="res://Entities/Components/HealthComponent.gd" id="3_ucvxj"]
+[ext_resource type="Script" uid="uid://cmrwry3cgj18k" path="res://Entities/Components/GettingHitManagerComponent.gd" id="4_echjx"]
+[ext_resource type="PackedScene" uid="uid://cg8sovak1nglu" path="res://Entities/Components/DetectionAreaComponent.tscn" id="5_echjx"]
+[ext_resource type="Script" uid="uid://b5uttgqqjgqly" path="res://Entities/Components/HurtboxComponent.gd" id="5_g8724"]
+[ext_resource type="PackedScene" uid="uid://br02qe1fncgmy" path="res://HUD/EntityStuff/HealthAndStats/HealthBarAndNameDisplay.tscn" id="6_kps30"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_mfsav"]
+resource_local_to_scene = true
+shader = ExtResource("2_mfsav")
+shader_parameter/mix_amount = 0.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_qs66y"]
+radius = 24.083189
+
+[node name="SimpleMinion" type="CharacterBody2D" groups=["Entities"]]
+material = SubResource("ShaderMaterial_mfsav")
+collision_layer = 9
+motion_mode = 1
+script = ExtResource("1_qs66y")
+attack_range = 70.0
+my_team = 2
+metadata/_custom_type_script = "uid://b3eyn2uusnbxu"
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+use_parent_material = true
+scale = Vector2(6, 6)
+offset = Vector2(3, 0)
+
+[node name="HealthComponent" type="Node" parent="."]
+script = ExtResource("3_ucvxj")
+max_health = 200.0
+curr_health = 200.0
+metadata/_custom_type_script = "uid://dsopyue7txr2b"
+
+[node name="GettingHitManagerComponent" type="Node" parent="."]
+script = ExtResource("4_echjx")
+metadata/_custom_type_script = "uid://cmrwry3cgj18k"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_qs66y")
+
+[node name="HurtboxComponent" type="Area2D" parent="."]
+script = ExtResource("5_g8724")
+metadata/_custom_type_script = "uid://b5uttgqqjgqly"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HurtboxComponent"]
+shape = SubResource("CircleShape2D_qs66y")
+
+[node name="DetectionAreaComponent" parent="." instance=ExtResource("5_echjx")]
+range_item_cull_mask = 4
+diameter = 1000
+my_team = 2
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
+
+[node name="RemoteTransform2D" type="RemoteTransform2D" parent="."]
+remote_path = NodePath("../GUIHolder/HealthBarAndNameDisplay")
+update_rotation = false
+
+[node name="GUIHolder" type="Node" parent="."]
+
+[node name="HealthBarAndNameDisplay" parent="GUIHolder" node_paths=PackedStringArray("health_component") instance=ExtResource("6_kps30")]
+wanted_offset = Vector2(0, -112)
+health_component = NodePath("../../HealthComponent")

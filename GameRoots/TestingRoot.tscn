@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://b5w3iujlul5bw"]
+[gd_scene load_steps=19 format=3 uid="uid://b5w3iujlul5bw"]
 
 [ext_resource type="Texture2D" uid="uid://dc88ec5wny1rk" path="res://icon.svg" id="1_4kfho"]
 [ext_resource type="Script" uid="uid://cgkkjj6gisfb1" path="res://GameRoots/TestingRoot.gd" id="1_m46vn"]
@@ -129,6 +129,8 @@ shader_parameter/mix_amount = 0.0
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hrkw6"]
 bg_color = Color(0.099985994, 0.09998601, 0.099985965, 1)
 
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_gondq"]
+
 [node name="TestingRoot" type="Node2D"]
 light_mask = 7
 visibility_layer = 7
@@ -179,27 +181,44 @@ follow_viewport_enabled = true
 
 [node name="EarthCharacter" parent="Characters" groups=["VisibleEntities"] instance=ExtResource("4_so4lt")]
 material = SubResource("ShaderMaterial_qjowt")
-position = Vector2(-553, -285)
+position = Vector2(-273, 979)
 my_team = 1
 
 [node name="EarthCharacter2" parent="Characters" groups=["VisibleEntities"] instance=ExtResource("4_so4lt")]
 material = SubResource("ShaderMaterial_12iin")
-position = Vector2(-211, -828)
+position = Vector2(197, 333)
 my_team = 2
 
 [node name="EarthCharacter3" parent="Characters" groups=["VisibleEntities"] instance=ExtResource("4_so4lt")]
 material = SubResource("ShaderMaterial_gp5ni")
-position = Vector2(-766, 184)
+position = Vector2(341, 994)
 my_team = 1
 
 [node name="EarthCharacter4" parent="Characters" groups=["VisibleEntities"] instance=ExtResource("4_so4lt")]
 material = SubResource("ShaderMaterial_h4lio")
-position = Vector2(-120, 490)
+position = Vector2(314, -1079)
 my_team = 2
 
 [node name="ControllableCamera" type="Camera2D" parent="."]
 zoom = Vector2(0.25, 0.25)
 script = ExtResource("3_hrkw6")
+
+[node name="Minions" type="CanvasLayer" parent="."]
+layer = 0
+follow_viewport_enabled = true
+
+[node name="BaseMarkers" type="CanvasLayer" parent="."]
+layer = -1
+follow_viewport_enabled = true
+
+[node name="EvilBase" type="Sprite2D" parent="BaseMarkers"]
+modulate = Color(1, 0, 1, 1)
+position = Vector2(0, -1000)
+texture = ExtResource("1_4kfho")
+
+[node name="GoodBase" type="Sprite2D" parent="BaseMarkers"]
+position = Vector2(0, 1000)
+texture = ExtResource("1_4kfho")
 
 [node name="Minimaps" type="CanvasLayer" parent="."]
 
@@ -234,11 +253,11 @@ layout_mode = 2
 [node name="ActionChoosingInterface" parent="ActionChoosers/VBoxContainer" instance=ExtResource("5_m46vn")]
 layout_mode = 2
 
-[node name="BetweenPlayersBlocker" type="CanvasLayer" parent="."]
+[node name="Blockers" type="CanvasLayer" parent="."]
 layer = 2
-visible = false
 
-[node name="Panel" type="Panel" parent="BetweenPlayersBlocker"]
+[node name="BetweenPlayersBlocker" type="Panel" parent="Blockers"]
+visible = false
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -246,7 +265,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_hrkw6")
 
-[node name="Label" type="Label" parent="BetweenPlayersBlocker/Panel"]
+[node name="Label" type="Label" parent="Blockers/BetweenPlayersBlocker"]
 layout_mode = 1
 anchors_preset = 14
 anchor_top = 0.5
@@ -261,3 +280,12 @@ text = "NEXT PLAYER'S TURN
 PRESS ANY BUTTON TO CONTINUE"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="AfterResolutionBlocker" type="Panel" parent="Blockers"]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_gondq")

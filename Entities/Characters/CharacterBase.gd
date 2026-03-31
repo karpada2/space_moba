@@ -12,13 +12,12 @@ var detection_area: DetectionAreaComponent
 var navigation_agent: NavigationAgent2D
 @onready var target_visualizer: TargetVisualizer = $TargetVisualizer
 @onready var target_chooser: TargetChooser = $TargetChooser
-@onready var health_bar_and_name_display: HealthBarAndNameDisplay = $OnPlayerGUIHolder/HealthBarOffseter/HealthBarAndNameDisplay
-@onready var health_bar_offseter: Node2D = $OnPlayerGUIHolder/HealthBarOffseter
+@onready var health_bar_and_name_display: HealthBarAndNameDisplay = $OnPlayerGUIHolder/HealthBarAndNameDisplay
 
 # max movement speed in pixels/seconds
 @export var move_speed_human: float = 50
 
-@export var attack_range: float = 70
+@export var attack_range: float = 120
 
 # how many pixels can be moved per turn
 @onready var move_distance_per_turn: float = (move_speed_human*(float(TurnResolutionManager.FRAMES_PER_TURN)/Engine.physics_ticks_per_second))
@@ -83,10 +82,15 @@ func action_choosing_end(team: Enums.Team) -> void:
 		
 		target_visualizer.hide()
 
+func calculate_navigation() -> void:
+	_calculate_navigation(navigation_agent)
+
 func action_choosing_advance() -> void:
 	if current_focused_action != null and next_chosen_action == null and is_alive():
 		if target_chooser.is_right_mouse_button_just_pressed():
 			current_focused_action.reset_target()
+		
+		target_visualizer.is_valid = is_action_possible(current_focused_action)
 		
 		if current_focused_action.target_type == Action.TargetingType.POSITION:
 			target_visualizer.choose_enabled(true, true, false)
@@ -106,9 +110,6 @@ func action_choosing_advance() -> void:
 				calculate_navigation()
 				if not is_action_possible(current_focused_action):
 					current_focused_action.reset_target()
-			
-			
-			target_visualizer.is_valid = is_action_possible(current_focused_action)
 		elif current_focused_action.target_type in [Action.TargetingType.ANY, Action.TargetingType.ENEMY, Action.TargetingType.ALLY]:
 			if current_focused_action.is_configured():
 				target_visualizer.choose_enabled(true, false, true)
@@ -155,7 +156,7 @@ func _on_move_path_changed() -> void:
 
 func died() -> void:
 	unreveal()
-	health_bar_offseter.hide()
+	health_bar_and_name_display.hide()
 	target_visualizer.hide()
 	target_chooser.disable()
 	hurtbox_component.monitoring = false
@@ -165,7 +166,7 @@ func died() -> void:
 
 func revive(revive_location: Vector2, health_percent: float = 1.0) -> void:
 	reveal()
-	health_bar_offseter.show()
+	health_bar_and_name_display.show()
 	target_visualizer.show()
 	hurtbox_component.monitoring = true
 	hurtbox_component.monitorable = true
@@ -187,22 +188,21 @@ func disable() -> void:
 
 func reveal() -> void:
 	show()
-	health_bar_offseter.show()
+	health_bar_and_name_display.show()
 
 func unreveal() -> void:
 	hide()
 	detection_area.disable()
 	target_visualizer.hide()
-	health_bar_offseter.hide()
+	health_bar_and_name_display.hide()
 
 func reveal_visible_enemies() -> void:
 	self.show()
 	detection_area.enable()
-	for node: Node2D in get_visible_enemies():
-		if node is CharacterBase:
-			node.reveal()
+	for node: EntityBase in get_visible_enemies():
+		node.reveal()
 
-func get_visible_enemies() -> Array[CharacterBase]:
+func get_visible_enemies() -> Array[EntityBase]:
 	return detection_area.get_visible_enemies()
 
 func turn_resolution_advance(resolving_team: Enums.Team, frame_count: int) -> void:
@@ -221,29 +221,6 @@ func is_action_possible(action: Action, wait_before_act: int = 0) -> bool
 
 @abstract
 func get_action_range(action: Action) -> float
-
-func optimize_move_path(path_in: PackedVector2Array, wanted_distance: float, target_position: Vector2) -> PackedVector2Array:
-	var path: PackedVector2Array = path_in.duplicate()
-	if path.size() >= 2:
-		var index_flag: bool = false
-		var index: int
-		for i: int in range(path.size() - 1, 1, -1):
-			if path[i].distance_to(target_position) < wanted_distance and path[i-1].distance_to(target_position) > wanted_distance:
-				index = i
-				index_flag = true
-				break
-		if index_flag:
-			var diff_between_last: Vector2 = path[index] - path[index-1]
-			var multiplier: float = 0.5
-			for i: int in range(2, 8, 1):
-				if (path[index-1] + (multiplier * diff_between_last)).distance_to(target_position) > wanted_distance:
-					multiplier += 2**(-i)
-				else:
-					multiplier -= 2**(-i)
-			var resulting_vector: Vector2 = path[index-1] + (multiplier * diff_between_last)
-			path = path.slice(0, index)
-			path.append(resulting_vector)
-	return path
 
 func create_wait_and_move_action(action: Action, wait_before_act: int) -> SequentialAction:
 	if action.target_type == Action.TargetingType.NONE or action is EntityBase.BaseMoveAction:
@@ -273,14 +250,6 @@ func action_focused(action: Action) -> void:
 func get_move_distance_per_frame() -> float:
 	return move_distance_per_turn/TurnResolutionManager.FRAMES_PER_TURN
 
-func is_movement_possible(target_pos: Vector2) -> bool:
-	navigation_agent.target_position = target_pos
-	calculate_navigation()
-	return navigation_agent.get_path_length() <= get_max_movement_distance_possible()
-
-func calculate_navigation(nav_agent_in: NavigationAgent2D = navigation_agent) -> void:
-	nav_agent_in.is_target_reachable()
-
 func get_max_movement_distance_possible() -> float:
 	return move_distance_per_turn
 
@@ -289,6 +258,7 @@ func action_selected(chosen_action: Action, wait_before_act: int) -> void:
 	if next_chosen_action == null:
 		ready_to_act = true
 		next_chosen_action = create_wait_and_move_action(chosen_action, wait_before_act)
+		current_focused_action = null
 		target_chooser.enabled = false
 	TurnChoosingManager.i_chose_action(self)
 

@@ -4,18 +4,28 @@ class_name DetectionAreaComponent
 @export var diameter: int = 256
 @export var my_team: Enums.Team = Enums.Team.GOOD:
 	set(value):
-		if value == Enums.Team.EVIL:
-			vision_cone_area.set_collision_mask_value(4, false)
-			vision_cone_area.set_collision_mask_value(3, true)
-		if value == Enums.Team.GOOD:
-			vision_cone_area.set_collision_mask_value(4, true)
-			vision_cone_area.set_collision_mask_value(3, false)
+		if vision_cone_area:
+			if value == Enums.Team.EVIL:
+				vision_cone_area.set_collision_mask_value(4, false)
+				vision_cone_area.set_collision_mask_value(3, true)
+			if value == Enums.Team.GOOD:
+				vision_cone_area.set_collision_mask_value(4, true)
+				vision_cone_area.set_collision_mask_value(3, false)
 		my_team = value
 
 @onready var vision_cone_area: Area2D = $VisionCone2D/VisionConeArea
 @onready var vision_cone_2d: VisionCone2D = $VisionCone2D
 
 var working: bool = true
+
+func _ready() -> void:
+	if vision_cone_area:
+			if my_team == Enums.Team.EVIL:
+				vision_cone_area.set_collision_mask_value(4, false)
+				vision_cone_area.set_collision_mask_value(3, true)
+			if my_team == Enums.Team.GOOD:
+				vision_cone_area.set_collision_mask_value(4, true)
+				vision_cone_area.set_collision_mask_value(3, false)
 
 func _physics_process(_delta: float) -> void:
 	vision_cone_2d.max_distance = (diameter/2.0)
@@ -32,11 +42,11 @@ func disable() -> void:
 	self.enabled = false
 	vision_cone_area.monitoring = false
 
-func get_visible_enemies() -> Array[CharacterBase]:
-	var visible_enemies: Array[CharacterBase] = []
+func get_visible_enemies() -> Array[EntityBase]:
+	var visible_enemies: Array[EntityBase] = []
 	if working:
 		for node: Node2D in vision_cone_area.get_overlapping_bodies():
-			if node is CharacterBase:
+			if node is EntityBase:
 				if (node.my_team == Enums.Team.EVIL and my_team == Enums.Team.GOOD) or (node.my_team == Enums.Team.GOOD and my_team == Enums.Team.EVIL) or (node.my_team == Enums.Team.NONE):
 					visible_enemies.append(node)
 	return visible_enemies
