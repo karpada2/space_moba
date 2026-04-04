@@ -4,7 +4,7 @@ class_name WaitAction
 var action_length_frames: int
 var frames_passed_this_action: int = 0
 
-func get_action_length_frames() -> int:
+func get_action_length_frames(_include_modifiers: bool = true) -> int:
 	return action_length_frames
 
 func _new_inner() -> WaitAction:

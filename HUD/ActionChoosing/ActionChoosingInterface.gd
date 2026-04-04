@@ -38,6 +38,12 @@ func _physics_process(_delta: float) -> void:
 	if focused_action:
 		if focused_action.is_configured():
 			wait_before_acting_slider.max_value = TurnResolutionManager.FRAMES_PER_TURN*focused_action.action_length_turns - last_character.create_wait_and_move_action(focused_action, 0).get_action_length_frames()
+			if focused_action is BaseAttackAction:
+				focused_action.fake_chosen_attack_amount = true
+				focused_action.set_frames_left(TurnResolutionManager.FRAMES_PER_TURN - last_character.create_wait_and_move_action(focused_action, 0).get_action_length_frames(false))
+				focused_action.fake_chosen_attack_amount = false
+			else:
+				focused_action.set_frames_left(int(wait_before_acting_slider.max_value))
 		else:
 			wait_before_acting_slider.max_value = TurnResolutionManager.FRAMES_PER_TURN*focused_action.action_length_turns - focused_action.get_action_length_frames()
 		max_slider_value_showcase.text = str(int(wait_before_acting_slider.max_value))
@@ -138,6 +144,10 @@ func switch_updated(switch_title: String, value: bool) -> void:
 
 ## is called by buttons to notify the interface that one has been clicked. should open up options and switches and stuff.
 func _action_pressed(pressed_action: Action) -> void:
+	if focused_action:
+		focused_action.update_modifiers.disconnect(update_available_modifiers)
+	pressed_action.update_modifiers.connect(update_available_modifiers)
+	
 	if focused_action != pressed_action:
 		lock_in_button.disabled = false
 		focused_action = pressed_action
@@ -193,3 +203,4 @@ func _on_lock_in_button_pressed() -> void:
 				if node is BaseButton:
 					node.disabled = true
 			choices.disabled = true
+			focused_action = null

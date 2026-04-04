@@ -15,7 +15,7 @@ class BaseMoveAction extends Action:
 	var position_tolerance_squared: float
 	var path_index: int = 1
 	
-	func get_action_length_frames() -> int:
+	func get_action_length_frames(_include_modifiers: bool = true) -> int:
 		if navigation_agent != null:
 			navigation_agent.is_target_reachable()
 			navigation_total_time = int(ceilf(navigation_agent.get_path_length()/self.move_distance_per_frame))
@@ -85,44 +85,13 @@ class BaseMoveAction extends Action:
 		return not is_target_reached()
 
 class NullBaseMoveAction extends BaseMoveAction:
-	func get_action_length_frames() -> int:
+	func get_action_length_frames(_include_modifiers: bool = true) -> int:
 		return 0
 	
 	static func actual_create() -> BaseMoveAction:
 		return NullBaseMoveAction.new()
 	
 	func run(_frames_passed: int) -> bool:
-		return false
-
-## applies the attack only, combined with an animation action before and after to achieve cool effect. this way multi-hit-attacks and shit also work.
-class BaseAttackAction extends Action:
-	var attack: Attack
-	
-	func get_action_length_frames() -> int:
-		return 0
-	
-	static func create(attack_in: Attack) -> BaseAttackAction:
-		var new_action: BaseAttackAction = BaseAttackAction.new()
-		new_action.action_name = "Attack"
-		new_action.action_length_turns = 1
-		new_action.target_type = TargetingType.ENEMY
-		
-		new_action.attack = attack_in
-		
-		return new_action
-	
-	func clone() -> BaseAttackAction:
-		var new_action: BaseAttackAction = _clone_inner()
-		new_action.attack = self.attack.clone()
-		
-		return new_action
-	
-	func _new_inner() -> BaseAttackAction:
-		return BaseAttackAction.new()
-	
-	func run(_frames_passed: int) -> bool:
-		if target_entity:
-			target_entity.getting_hit_manager.attack(attack)
 		return false
 
 @export var my_team: Enums.Team = Enums.Team.NONE
@@ -229,6 +198,7 @@ func _ready() -> void:
 	hurtbox_component.my_team = self.my_team
 	getting_hit_manager.health_component = self.health_component
 	getting_hit_manager.hurtbox_component = self.hurtbox_component
+	getting_hit_manager.my_owner = self
 	health_component.died.connect(_died)
 	
 	if GameRoot.get_game_root():

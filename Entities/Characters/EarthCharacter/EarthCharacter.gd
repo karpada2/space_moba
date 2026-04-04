@@ -11,7 +11,8 @@ func get_available_actions() -> Dictionary[String, ActionArray]:
 					navigation_agent
 				),
 				BaseAttackAction.create(
-					Attack.create(100, Enums.DamageType.PHYSICAL)
+					BasicAttack.create(100, Enums.DamageType.PHYSICAL, self),
+					character_stats
 				)
 			]
 		)

@@ -2,7 +2,13 @@
 
 [ext_resource type="Script" uid="uid://bshwdvvwfjj3h" path="res://HUD/EntityStuff/Teams/TopBarCharacterShowcase.gd" id="1_nixro"]
 [ext_resource type="PackedScene" uid="uid://bq24ejxvh2dqa" path="res://HUD/EntityStuff/HealthAndStats/HealthBarAndNameDisplay.tscn" id="2_76m1r"]
-[ext_resource type="LabelSettings" uid="uid://d2hpnlyx1ol8r" path="res://GlobalResources/DefaultLabelSettings.tres" id="3_4r8pk"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_pofvv"]
+resource_local_to_scene = true
+font_size = 96
+font_color = Color(1, 0, 0, 1)
+outline_size = 12
+outline_color = Color(0, 0, 0, 1)
 
 [sub_resource type="LabelSettings" id="LabelSettings_4r8pk"]
 line_spacing = 0.0
@@ -50,10 +56,13 @@ expand_mode = 4
 stretch_mode = 5
 
 [node name="RespawnTimer" type="Label" parent="VBoxContainer/CharacterPortrait"]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 23.0
-label_settings = ExtResource("3_4r8pk")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+label_settings = SubResource("LabelSettings_pofvv")
 horizontal_alignment = 1
 vertical_alignment = 1
 

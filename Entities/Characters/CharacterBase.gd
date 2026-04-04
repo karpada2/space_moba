@@ -13,6 +13,7 @@ var total_money_dropped_on_death: float = 0.05
 
 
 var respawn_countdown: int = 0
+var died_this_turn: bool = false
 
 var detection_area: DetectionAreaComponent
 var navigation_agent: NavigationAgent2D
@@ -26,11 +27,16 @@ var navigation_agent: NavigationAgent2D
 
 @export var attack_range: float = 120
 
+@export var frames_before_attack: int = 15
+@export var frames_after_attack: int = 5
+
 # how many pixels can be moved per turn
 @onready var move_distance_per_turn: float = (move_speed_human*(float(TurnResolutionManager.FRAMES_PER_TURN)/Engine.physics_ticks_per_second))
+@onready var character_stats: CharacterStats = CharacterStats.create(frames_before_attack, frames_after_attack, self.get_move_distance_per_frame())
 
 var start_pos: Vector2
 
+var next_chosen_base_action: Action
 var next_chosen_action: Action
 var ready_to_act: bool = false
 
@@ -68,11 +74,14 @@ func turn_resolution_start(_team: Enums.Team) -> void:
 	pass
 
 func turn_resolution_end(team: Enums.Team) -> void:
-	if my_team != team and not is_alive():
+	if my_team != team and not is_alive() and not died_this_turn:
+			respawn_countdown -= 1
 			if respawn_countdown <= 0:
 				request_revive.emit(self)
-			respawn_countdown -= 1
 			respawn_countdown_changed.emit(respawn_countdown)
+	
+	if died_this_turn:
+		died_this_turn = false
 	
 	if team == my_team and is_alive():
 		next_chosen_action.action_length_used += 1
@@ -110,7 +119,7 @@ func action_choosing_advance() -> void:
 					navigation_agent.target_position = target_chooser.get_mouse_target_position()
 					calculate_navigation()
 			else:
-				target_visualizer.set_target_position( current_focused_action.target_position)
+				target_visualizer.set_target_position(current_focused_action.target_position)
 			
 			
 			if target_chooser.is_left_mouse_button_just_pressed() and not current_focused_action.is_configured():
@@ -173,6 +182,7 @@ func died() -> void:
 	hurtbox_component.visible = false
 	money_handler_component.lose_unsecured_money()
 	respawn_countdown = 2
+	died_this_turn = true
 	respawn_countdown_changed.emit(respawn_countdown)
 
 func revive(revive_location: Vector2, health_percent: float = 1.0) -> void:
@@ -258,8 +268,7 @@ func create_wait_and_move_action(action: Action, wait_before_act: int) -> Sequen
 	
 	var path: PackedVector2Array = optimize_move_path(navigation_agent.get_current_navigation_path(), get_action_range(action), navigation_agent.target_position)
 	
-	var new_action: SequentialAction = SequentialAction.create(action.action_name, ActionArray.create([WaitAction.create(wait_before_act), BaseMoveAction.create(self, get_move_distance_per_frame(), null, path), action]))
-	return new_action
+	return SequentialAction.create(action.action_name, ActionArray.create([WaitAction.create(wait_before_act), BaseMoveAction.create(self, get_move_distance_per_frame(), null, path), action]))
 
 func action_focused(action: Action) -> void:
 	current_focused_action = action
@@ -275,6 +284,7 @@ func get_max_movement_distance_possible() -> float:
 func action_selected(chosen_action: Action, wait_before_act: int) -> void:
 	if next_chosen_action == null:
 		ready_to_act = true
+		next_chosen_base_action = chosen_action
 		next_chosen_action = create_wait_and_move_action(chosen_action, wait_before_act)
 		current_focused_action = null
 		target_chooser.enabled = false

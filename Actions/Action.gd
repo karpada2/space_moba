@@ -3,6 +3,8 @@ extends Resource
 ## Actions for entities to run
 class_name Action
 
+@warning_ignore("unused_signal")
+signal update_modifiers(action: Action)
 
 enum TargetingType {
 	## no targeting, used for things like auto-self cast abilities
@@ -94,7 +96,7 @@ func target_set() -> void:
 	pass
 
 @abstract
-func get_action_length_frames() -> int
+func get_action_length_frames(include_modifiers: bool = true) -> int
 
 @abstract
 func clone() -> Action
@@ -102,6 +104,8 @@ func clone() -> Action
 @abstract
 func _new_inner() -> Action
 
+func set_frames_left(_frames_left: int) -> void:
+	pass
 
 func _clone_inner() -> Action:
 	var new_action: Action = self._new_inner()

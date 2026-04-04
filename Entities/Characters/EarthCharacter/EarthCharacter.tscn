@@ -23,6 +23,7 @@ collision_mask = 0
 motion_mode = 1
 script = ExtResource("1_oofe1")
 move_speed_human = 200.0
+frames_after_attack = 15
 metadata/_custom_type_script = "uid://cckinmhmx0uvy"
 
 [node name="Sprite" type="Sprite2D" parent="."]
@@ -38,7 +39,6 @@ metadata/_custom_type_script = "uid://b0xq6ymtdw1ip"
 
 [node name="HealthComponent" type="Node" parent="."]
 script = ExtResource("3_0y17a")
-curr_health = 192.525
 metadata/_custom_type_script = "uid://dsopyue7txr2b"
 
 [node name="GettingHitManagerComponent" type="Node" parent="."]

@@ -14,10 +14,10 @@ static func create(action_name_in: String, actions: ActionArray) -> SequentialAc
 	
 	return new_action
 
-func get_action_length_frames() -> int:
+func get_action_length_frames(include_modifiers: bool = true) -> int:
 	var sum: int = 0
 	for i: int in range(actions_to_be_performed.array.size()):
-		sum += actions_to_be_performed.array[i].get_action_length_frames()
+		sum += actions_to_be_performed.array[i].get_action_length_frames(include_modifiers)
 	return sum
 
 func _new_inner() -> SequentialAction:

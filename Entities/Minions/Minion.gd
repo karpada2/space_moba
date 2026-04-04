@@ -8,7 +8,7 @@ class SetShaderMixAmountAction extends Action:
 	var mix_amount: float
 	var material_to_change: Material
 	
-	func get_action_length_frames() -> int:
+	func get_action_length_frames(_include_modifiers: bool = true) -> int:
 		return 0
 	
 	func clone() -> SetShaderMixAmountAction:
@@ -75,22 +75,22 @@ static func create(team: Enums.Team) -> Minion:
 @export var frames_after_attacks: int = 20
 
 @export var attack_damage: float = 20
-@onready var attack: Attack = Attack.create(self.attack_damage, Enums.DamageType.PHYSICAL)
+@onready var attack: Attack = BasicAttack.create(self.attack_damage, Enums.DamageType.PHYSICAL, self)
 
 @export var base_money: float = 30
 @export var money_growth_per_round: float = 1
 
 @export_category("Targeting Weights")
-@export var tower_targeting_weight: float = 300
-@export var tower_distance_factor: float = 0.2
-@export var character_targeting_weight: float = 20
-@export var character_distance_factor: float = 0.3
+@export var tower_targeting_weight: float = 50
+@export var tower_distance_factor: float = 0.1
+@export var character_targeting_weight: float = 10
+@export var character_distance_factor: float = 0.2
 @export var minion_targeting_weight: float = 5
-@export var minion_distance_factor: float = 0.1
+@export var minion_distance_factor: float = 0.2
 
 # how many pixels can be moved per turn
 @onready var move_distance_per_turn: float = (move_speed_human*(float(TurnResolutionManager.FRAMES_PER_TURN)/Engine.physics_ticks_per_second))
-
+@onready var character_stats: CharacterStats = CharacterStats.create(frames_before_attacks, frames_after_attacks, get_move_distance_per_frame())
 
 var next_chosen_action: Action = null
 var ready_to_act: bool = false
@@ -146,24 +146,21 @@ func turn_resolution_start(team: Enums.Team) -> void:
 			last_target = get_enemy_to_attack()
 		
 		if last_target:
-			var temp_attack_action: EntityBase.BaseAttackAction = EntityBase.BaseAttackAction.create(attack)
+			var temp_attack_action: BaseAttackAction = BaseAttackAction.create(attack, character_stats)
+			temp_attack_action.fake_chosen_attack_amount = true
 			temp_attack_action.set_target_entity(last_target)
 			var move_action: EntityBase.BaseMoveAction = create_move_action(temp_attack_action)
 			@warning_ignore("integer_division")
 			var attack_cycles_possible: int = int((TurnResolutionManager.FRAMES_PER_TURN - move_action.get_action_length_frames())/(frames_before_attacks + frames_after_attacks))
 			var action_array: Array[Action] = [move_action]
 			for _i: int in attack_cycles_possible:
-				action_array.append_array([SetShaderMixAmountAction.create(0.5, material), WaitAction.create(frames_before_attacks), temp_attack_action.clone(), SetShaderMixAmountAction.create(1, material), WaitAction.create(frames_after_attacks), SetShaderMixAmountAction.create(0, material)])
+				action_array.append_array([SetShaderMixAmountAction.create(0.5, material), temp_attack_action.clone(), SetShaderMixAmountAction.create(1, material)])
+			action_array.append(SetShaderMixAmountAction.create(0, material))
 			next_chosen_action = SequentialAction.create("Attack", ActionArray.create(action_array))
 		else:
 			navigation_agent.target_position = get_enemy_base_position()
 			calculate_navigation()
 			next_chosen_action = EntityBase.BaseMoveAction.create(self, get_move_distance_per_frame(), navigation_agent)
-		
-		if last_target:
-			print(get_display_name(), " attempting to attack ", last_target.get_display_name(), " | target score: ", calculate_target_score(last_target))
-		else:
-			print(get_display_name(), " nothing to attack :(")
 		ready_to_act = true
 
 func turn_resolution_advance(team: Enums.Team, frames_passed: int) -> void:

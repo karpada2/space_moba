@@ -183,7 +183,7 @@ follow_viewport_enabled = true
 
 [node name="EarthCharacter" parent="Characters" groups=["VisibleEntities"] instance=ExtResource("4_so4lt")]
 material = SubResource("ShaderMaterial_12iin")
-position = Vector2(-273, -205)
+position = Vector2(-441, -965)
 my_team = 1
 
 [node name="EarthCharacter2" parent="Characters" groups=["VisibleEntities"] instance=ExtResource("4_so4lt")]
