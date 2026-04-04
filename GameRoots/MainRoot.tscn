@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://ci4mc6nwwx55y"]
+
+[ext_resource type="Script" uid="uid://st8sj7sv5usv" path="res://GameRoots/MainRoot.gd" id="1_i3dtx"]
+
+[node name="MainRoot" type="Node2D"]
+script = ExtResource("1_i3dtx")

@@ -1,15 +1,15 @@
-[gd_scene load_steps=6 format=3 uid="uid://br02qe1fncgmy"]
+[gd_scene load_steps=6 format=3 uid="uid://bq24ejxvh2dqa"]
 
-[ext_resource type="Script" uid="uid://chjigwa2rckxy" path="res://HUD/EntityStuff/HealthAndStats/HealthBarAndNameDisplay.gd" id="1_kjenk"]
+[ext_resource type="Script" uid="uid://ctt28ffxbxdkq" path="res://HUD/EntityStuff/HealthAndStats/HealthBarAndNameDisplay.gd" id="1_kjenk"]
 [ext_resource type="Script" uid="uid://ogjypl50xlq2" path="res://HUD/EntityStuff/HealthAndStats/SegmentedProgressBar.gd" id="2_pu2mg"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_pu2mg"]
 line_spacing = 0.0
-font_size = 32
+font_size = 26
 outline_size = 8
 outline_color = Color(0, 0, 0, 1)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pu2mg"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hs80s"]
 resource_local_to_scene = true
 bg_color = Color(0, 0.05051148, 0.13585794, 1)
 corner_radius_top_left = 6
@@ -18,49 +18,34 @@ corner_radius_bottom_right = 6
 corner_radius_bottom_left = 6
 corner_detail = 6
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mmjno"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_q58mt"]
 resource_local_to_scene = true
-bg_color = Color(0, 1, 0, 1)
+bg_color = Color(1, 0, 0, 1)
 corner_radius_top_left = 6
 corner_radius_top_right = 6
 corner_radius_bottom_right = 6
 corner_radius_bottom_left = 6
 corner_detail = 6
 
-[node name="HealthBarAndNameDisplay" type="Node2D" groups=["OnEntitiesHealthbars"]]
-script = ExtResource("1_kjenk")
-as_enemy = false
-
-[node name="Offset" type="Node2D" parent="."]
-
-[node name="VBoxContainer" type="VBoxContainer" parent="Offset"]
-custom_minimum_size = Vector2(320, 50)
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -160.0
-offset_top = -67.0
-offset_right = 160.0
-grow_horizontal = 2
-grow_vertical = 0
-size_flags_horizontal = 4
+[node name="HealthBarAndNameDisplay" type="VBoxContainer"]
+offset_right = 40.0
+offset_bottom = 53.0
 alignment = 2
+script = ExtResource("1_kjenk")
 
-[node name="NameDisplay" type="Label" parent="Offset/VBoxContainer"]
-custom_minimum_size = Vector2(320, 45)
+[node name="NameDisplay" type="Label" parent="."]
 layout_mode = 2
+size_flags_vertical = 3
 label_settings = SubResource("LabelSettings_pu2mg")
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="HealthBar" type="ProgressBar" parent="Offset/VBoxContainer"]
-custom_minimum_size = Vector2(320, 18)
+[node name="HealthBar" type="ProgressBar" parent="."]
+custom_minimum_size = Vector2(20, 4)
 layout_mode = 2
-size_flags_vertical = 8
-theme_override_styles/background = SubResource("StyleBoxFlat_pu2mg")
-theme_override_styles/fill = SubResource("StyleBoxFlat_mmjno")
+size_flags_vertical = 3
+theme_override_styles/background = SubResource("StyleBoxFlat_hs80s")
+theme_override_styles/fill = SubResource("StyleBoxFlat_q58mt")
 value = 38.64
 show_percentage = false
 script = ExtResource("2_pu2mg")

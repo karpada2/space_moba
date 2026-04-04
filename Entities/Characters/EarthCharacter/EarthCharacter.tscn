@@ -1,15 +1,16 @@
-[gd_scene load_steps=12 format=3 uid="uid://k3mslpvijhds"]
+[gd_scene load_steps=13 format=3 uid="uid://k3mslpvijhds"]
 
 [ext_resource type="Script" uid="uid://cckinmhmx0uvy" path="res://Entities/Characters/EarthCharacter/EarthCharacter.gd" id="1_oofe1"]
 [ext_resource type="Texture2D" uid="uid://dddmxxuasemfw" path="res://Entities/Characters/EarthCharacter/EarthSprite.png" id="2_symtk"]
 [ext_resource type="Script" uid="uid://dsopyue7txr2b" path="res://Entities/Components/HealthComponent.gd" id="3_0y17a"]
+[ext_resource type="Script" uid="uid://b0xq6ymtdw1ip" path="res://Entities/Components/MoneyHandlerComponent.gd" id="3_bk6up"]
 [ext_resource type="Script" uid="uid://cmrwry3cgj18k" path="res://Entities/Components/GettingHitManagerComponent.gd" id="4_symtk"]
 [ext_resource type="Script" uid="uid://b5uttgqqjgqly" path="res://Entities/Components/HurtboxComponent.gd" id="5_h1xd8"]
 [ext_resource type="PackedScene" uid="uid://cr32u8kaclsx1" path="res://Entities/Components/TargetChooser.tscn" id="7_3nsai"]
 [ext_resource type="PackedScene" uid="uid://cg8sovak1nglu" path="res://Entities/Components/DetectionAreaComponent.tscn" id="7_h1xd8"]
 [ext_resource type="PackedScene" uid="uid://b11b2nrejvoal" path="res://Entities/Components/TargetVisualizer.tscn" id="9_5dj41"]
 [ext_resource type="Texture2D" uid="uid://wu6kq74xu18v" path="res://Entities/Components/selection_indicator.png" id="9_7rs7k"]
-[ext_resource type="PackedScene" uid="uid://br02qe1fncgmy" path="res://HUD/EntityStuff/HealthAndStats/HealthBarAndNameDisplay.tscn" id="10_7rs7k"]
+[ext_resource type="PackedScene" uid="uid://br02qe1fncgmy" path="res://HUD/EntityStuff/HealthAndStats/OffsetHealthBarAndNameDisplay.tscn" id="10_7rs7k"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_7rs7k"]
 radius = 36.0
@@ -31,8 +32,13 @@ scale = Vector2(8.14, 8.14)
 texture = ExtResource("2_symtk")
 offset = Vector2(3, 0)
 
+[node name="MoneyHandlerComponent" type="Node" parent="."]
+script = ExtResource("3_bk6up")
+metadata/_custom_type_script = "uid://b0xq6ymtdw1ip"
+
 [node name="HealthComponent" type="Node" parent="."]
 script = ExtResource("3_0y17a")
+curr_health = 192.525
 metadata/_custom_type_script = "uid://dsopyue7txr2b"
 
 [node name="GettingHitManagerComponent" type="Node" parent="."]
@@ -66,11 +72,12 @@ position_visualization_image = ExtResource("9_7rs7k")
 entity_visualization_image = ExtResource("9_7rs7k")
 
 [node name="RemoteTransform2D" type="RemoteTransform2D" parent="."]
-remote_path = NodePath("../OnPlayerGUIHolder/HealthBarAndNameDisplay")
+remote_path = NodePath("../OnPlayerGUIHolder/OffsetHealthBarAndNameDisplay")
 update_rotation = false
 
 [node name="OnPlayerGUIHolder" type="Node" parent="."]
 
-[node name="HealthBarAndNameDisplay" parent="OnPlayerGUIHolder" node_paths=PackedStringArray("health_component") instance=ExtResource("10_7rs7k")]
+[node name="OffsetHealthBarAndNameDisplay" parent="OnPlayerGUIHolder" node_paths=PackedStringArray("health_component") instance=ExtResource("10_7rs7k")]
 wanted_offset = Vector2(0, -112)
 health_component = NodePath("../../HealthComponent")
+wanted_size = Vector2(400, 64)

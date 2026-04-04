@@ -43,6 +43,8 @@ func _physics_process(_delta: float) -> void:
 		max_slider_value_showcase.text = str(int(wait_before_acting_slider.max_value))
 		current_slider_value_showcase.text = str(int(wait_before_acting_slider.value))
 		length_display.text = "Action Length [Turns]: " + str(focused_action.action_length_turns)
+	else:
+		length_display.text = "Action Length [Turns]: No Action Chosen Yet!"
 
 func set_lock_in_button(new_button: Button) -> void:
 	if lock_in_button != null and lock_in_button.pressed.is_connected(_on_lock_in_button_pressed):

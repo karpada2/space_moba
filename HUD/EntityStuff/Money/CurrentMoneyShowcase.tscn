@@ -1,0 +1,30 @@
+[gd_scene load_steps=4 format=3 uid="uid://ddl8uslynjduy"]
+
+[ext_resource type="Script" uid="uid://d2j26xn1usr0a" path="res://HUD/EntityStuff/Money/CurrentMoneyShowcase.gd" id="1_iih63"]
+[ext_resource type="LabelSettings" uid="uid://d2hpnlyx1ol8r" path="res://GlobalResources/DefaultLabelSettings.tres" id="2_d6h6t"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_d6h6t"]
+resource_local_to_scene = true
+font_size = 8
+font_color = Color(1, 0, 0, 1)
+outline_size = 4
+outline_color = Color(0, 0, 0, 1)
+
+[node name="CurrentMoneyShowcase" type="VBoxContainer"]
+custom_minimum_size = Vector2(100, 50)
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+grow_vertical = 0
+alignment = 2
+script = ExtResource("1_iih63")
+
+[node name="SecuredMoney" type="Label" parent="."]
+layout_mode = 2
+text = "Secured"
+label_settings = ExtResource("2_d6h6t")
+
+[node name="UnsecuredMoney" type="Label" parent="."]
+layout_mode = 2
+text = "Unsecured"
+label_settings = SubResource("LabelSettings_d6h6t")

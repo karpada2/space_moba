@@ -38,19 +38,27 @@ class SetShaderMixAmountAction extends Action:
 static var preloaded_minion: PackedScene = preload("res://Entities/Minions/SimpleMinion.tscn")
 static var preload_good_sprite: Texture2D = preload("res://Entities/Minions/GoodMinionSprite.png")
 static var preload_evil_sprite: Texture2D = preload("res://Entities/Minions/EvilMinionSprite.png")
+static var base_name: String = "Simple Minion #"
+static var minion_count: int = 0
+
 
 
 static func create(team: Enums.Team) -> Minion:
 	var new_minion: Minion = preloaded_minion.instantiate()
 	
+	new_minion.set_display_name(base_name + str(minion_count))
+	minion_count += 1
 	new_minion.texture = preload_good_sprite if team == Enums.Team.GOOD else preload_evil_sprite
 	new_minion.my_team = team
 	
 	return new_minion
 
+
+
+
 @onready var navigation_agent: NavigationAgent2D = $NavigationAgent2D
 @onready var detection_area: DetectionAreaComponent = $DetectionAreaComponent
-@onready var health_bar_and_name_display: HealthBarAndNameDisplay = $GUIHolder/HealthBarAndNameDisplay
+@onready var health_bar_and_name_display: OffsetHealthBarAndNameDisplay = $GUIHolder/OffsetHealthBarAndNameDisplay
 @onready var sprite_2d: Sprite2D = $Sprite2D
 
 @export var texture: Texture2D:
@@ -68,6 +76,9 @@ static func create(team: Enums.Team) -> Minion:
 
 @export var attack_damage: float = 20
 @onready var attack: Attack = Attack.create(self.attack_damage, Enums.DamageType.PHYSICAL)
+
+@export var base_money: float = 30
+@export var money_growth_per_round: float = 1
 
 @export_category("Targeting Weights")
 @export var tower_targeting_weight: float = 300
@@ -92,14 +103,10 @@ func _ready() -> void:
 	detection_area.my_team = my_team
 	sprite_2d.texture = texture
 	
-	TurnChoosingManager.choosing_start.connect(set_health_bar_display)
+	health_bar_and_name_display.associated_team = my_team
 	
 	TurnResolutionManager.resolution_started.connect(turn_resolution_start)
-	TurnResolutionManager.resolution_started.connect(set_health_bar_display)
 	TurnResolutionManager.resolution_advance.connect(turn_resolution_advance)
-
-func set_health_bar_display(team: Enums.Team) -> void:
-	health_bar_and_name_display.as_enemy = team != my_team
 
 func calculate_target_score(target: EntityBase) -> float:
 	var score: float = -INF
@@ -210,6 +217,9 @@ func disable() -> void:
 func died() -> void:
 	self.queue_free()
 
+func get_portrait() -> Texture2D:
+	return texture
+
 func create_move_action(action: Action) -> EntityBase.BaseMoveAction:
 	if action.target_entity:
 		navigation_agent.target_position = action.target_entity.global_position
@@ -224,3 +234,6 @@ func create_move_action(action: Action) -> EntityBase.BaseMoveAction:
 	
 	var new_action: EntityBase.BaseMoveAction = EntityBase.BaseMoveAction.create(self, get_move_distance_per_frame(), null, path)
 	return new_action
+
+func get_total_money_dropped() -> float:
+	return base_money + GameRoot.get_game_root().game_length*money_growth_per_round

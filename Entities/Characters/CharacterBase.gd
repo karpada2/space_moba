@@ -4,6 +4,12 @@ class_name CharacterBase
 
 
 signal request_revive(character: CharacterBase)
+signal respawn_countdown_changed(new_time_left: int)
+
+
+@export var base_money_dropped_on_death: float = 500
+@export var money_dropped_on_death_growth: float = 50
+var total_money_dropped_on_death: float = 0.05
 
 
 var respawn_countdown: int = 0
@@ -12,7 +18,8 @@ var detection_area: DetectionAreaComponent
 var navigation_agent: NavigationAgent2D
 @onready var target_visualizer: TargetVisualizer = $TargetVisualizer
 @onready var target_chooser: TargetChooser = $TargetChooser
-@onready var health_bar_and_name_display: HealthBarAndNameDisplay = $OnPlayerGUIHolder/HealthBarAndNameDisplay
+@onready var health_bar_and_name_display: OffsetHealthBarAndNameDisplay = $OnPlayerGUIHolder/OffsetHealthBarAndNameDisplay
+@onready var money_handler_component: MoneyHandlerComponent = $MoneyHandlerComponent
 
 # max movement speed in pixels/seconds
 @export var move_speed_human: float = 50
@@ -48,6 +55,7 @@ func _ready() -> void:
 	target_chooser.my_team = self.my_team
 	
 	health_bar_and_name_display.display_name = get_display_name()
+	health_bar_and_name_display.associated_team = my_team
 	
 	TurnChoosingManager.choosing_start.connect(action_choosing_start)
 	TurnChoosingManager.choosing_end.connect(action_choosing_end)
@@ -56,14 +64,15 @@ func _ready() -> void:
 	TurnResolutionManager.resolution_advance.connect(turn_resolution_advance)
 	TurnResolutionManager.resolution_ended.connect(turn_resolution_end)
 
-func turn_resolution_start(team: Enums.Team) -> void:
-	health_bar_and_name_display.as_enemy = team != my_team
+func turn_resolution_start(_team: Enums.Team) -> void:
+	pass
 
 func turn_resolution_end(team: Enums.Team) -> void:
 	if my_team != team and not is_alive():
 			if respawn_countdown <= 0:
 				request_revive.emit(self)
 			respawn_countdown -= 1
+			respawn_countdown_changed.emit(respawn_countdown)
 	
 	if team == my_team and is_alive():
 		next_chosen_action.action_length_used += 1
@@ -71,7 +80,7 @@ func turn_resolution_end(team: Enums.Team) -> void:
 			next_chosen_action = null
 
 func action_choosing_start(team: Enums.Team) -> void:
-	health_bar_and_name_display.as_enemy = team != my_team
+	pass
 	
 	if my_team == team and next_chosen_action == null and is_alive():
 			target_chooser.enable()
@@ -162,7 +171,9 @@ func died() -> void:
 	hurtbox_component.monitoring = false
 	hurtbox_component.monitorable = false
 	hurtbox_component.visible = false
+	money_handler_component.lose_unsecured_money()
 	respawn_countdown = 2
+	respawn_countdown_changed.emit(respawn_countdown)
 
 func revive(revive_location: Vector2, health_percent: float = 1.0) -> void:
 	reveal()
@@ -174,6 +185,7 @@ func revive(revive_location: Vector2, health_percent: float = 1.0) -> void:
 	health_component.heal(health_component.max_health * health_percent)
 	global_position = revive_location
 	respawn_countdown = 0
+	respawn_countdown_changed.emit(respawn_countdown)
 
 func kill() -> void:
 	health_component.deal_damage(health_component.max_health * 999)
@@ -221,6 +233,12 @@ func is_action_possible(action: Action, wait_before_act: int = 0) -> bool
 
 @abstract
 func get_action_range(action: Action) -> float
+
+@abstract
+func get_bounty_collection_radius() -> float
+
+func get_total_money_dropped() -> float:
+	return money_handler_component.get_money_dropped_on_death() + (base_money_dropped_on_death + (GameRoot.get_game_root().game_length * money_dropped_on_death_growth))
 
 func create_wait_and_move_action(action: Action, wait_before_act: int) -> SequentialAction:
 	if action.target_type == Action.TargetingType.NONE or action is EntityBase.BaseMoveAction:

@@ -6,7 +6,7 @@
 [ext_resource type="Script" uid="uid://cmrwry3cgj18k" path="res://Entities/Components/GettingHitManagerComponent.gd" id="4_echjx"]
 [ext_resource type="PackedScene" uid="uid://cg8sovak1nglu" path="res://Entities/Components/DetectionAreaComponent.tscn" id="5_echjx"]
 [ext_resource type="Script" uid="uid://b5uttgqqjgqly" path="res://Entities/Components/HurtboxComponent.gd" id="5_g8724"]
-[ext_resource type="PackedScene" uid="uid://br02qe1fncgmy" path="res://HUD/EntityStuff/HealthAndStats/HealthBarAndNameDisplay.tscn" id="6_kps30"]
+[ext_resource type="PackedScene" uid="uid://br02qe1fncgmy" path="res://HUD/EntityStuff/HealthAndStats/OffsetHealthBarAndNameDisplay.tscn" id="6_kps30"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_mfsav"]
 resource_local_to_scene = true
@@ -58,11 +58,13 @@ my_team = 2
 [node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
 
 [node name="RemoteTransform2D" type="RemoteTransform2D" parent="."]
-remote_path = NodePath("../GUIHolder/HealthBarAndNameDisplay")
+remote_path = NodePath("../GUIHolder/OffsetHealthBarAndNameDisplay")
 update_rotation = false
 
 [node name="GUIHolder" type="Node" parent="."]
 
-[node name="HealthBarAndNameDisplay" parent="GUIHolder" node_paths=PackedStringArray("health_component") instance=ExtResource("6_kps30")]
+[node name="OffsetHealthBarAndNameDisplay" parent="GUIHolder" node_paths=PackedStringArray("health_component") instance=ExtResource("6_kps30")]
 wanted_offset = Vector2(0, -112)
 health_component = NodePath("../../HealthComponent")
+associated_team = 2
+wanted_size = Vector2(240, 64)

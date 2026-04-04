@@ -1,3 +1,4 @@
+@abstract
 extends EntityBase
 class_name TowerBase
 

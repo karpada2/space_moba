@@ -24,3 +24,9 @@ func get_action_range(action: Action) -> float:
 	if action is EntityBase.BaseMoveAction:
 		return 0
 	return attack_range
+
+func get_bounty_collection_radius() -> float:
+	return 400
+
+func get_portrait() -> Texture2D:
+	return preload("res://HUD/Minimaps/Icons/EarthIcon.png")

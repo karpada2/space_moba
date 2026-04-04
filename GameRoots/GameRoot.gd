@@ -15,7 +15,6 @@ var game_length: int = 0
 
 func _ready() -> void:
 	self._current_game_root = self
-	print(pow(2, -5))
 
 func _input(event: InputEvent) -> void:
 	if event is InputEventMouseButton or event is InputEventKey:
@@ -75,10 +74,10 @@ func resolve_rect_overlaps(rects: Array[Rect2], max_iterations: int = 100) -> Ar
 	return offset_result
 
 func _physics_process(_delta: float) -> void:
-	var healthbars: Array[HealthBarAndNameDisplay] = []
+	var healthbars: Array[OffsetHealthBarAndNameDisplay] = []
 	var rects: Array[Rect2] = []
 	for node: Node in get_tree().get_nodes_in_group("OnEntitiesHealthbars"):
-		if node is HealthBarAndNameDisplay and node.visible:
+		if node is OffsetHealthBarAndNameDisplay and node.visible:
 			healthbars.append(node)
 			rects.append(node.get_global_rect(true))
 	
@@ -109,6 +108,9 @@ func get_all_entities(alive_only: bool = true) -> Array[EntityBase]
 @abstract
 func get_enemy_base_position(team: Enums.Team) -> Vector2
 
+@abstract
+func entity_died(entity: EntityBase) -> void
+
 func reveal_as_needed(team: Enums.Team) -> void:
 	var all_entities: Array[EntityBase] = get_all_entities()
 	
@@ -129,6 +131,14 @@ func disable_team(team: Enums.Team) -> void:
 	var team_entities: Array[EntityBase] = get_entities_in_team(team)
 	for entity: EntityBase in team_entities:
 		entity.disable()
+
+func update_healthbars_enemy_status(team: Enums.Team) -> void:
+	for node: Node in get_tree().get_nodes_in_group("AllHealthBars"):
+		if node is OffsetHealthBarAndNameDisplay or node is HealthBarAndNameDisplay:
+			node.update_as_enemy(team)
+
+@abstract
+func switch_character_choosing_actions(character: CharacterBase) -> void
 
 @abstract
 func get_all_characters(force_update: bool = false, alive_only: bool = true) -> Array[CharacterBase]

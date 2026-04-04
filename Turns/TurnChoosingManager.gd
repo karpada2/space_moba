@@ -43,7 +43,7 @@ func start_choosing(team: Enums.Team) -> void:
 	
 	for character: CharacterBase in current_choosing_team_characters:
 		action_chooser_character_switchers.append(ActionChooserSwitchCharacterButton.create(character, action_chooser_character_switchers_group))
-		action_chooser_character_switchers.back().switch_character.connect(action_choosing_interface.set_character)
+		action_chooser_character_switchers.back().switch_character.connect(GameRoot.get_game_root().switch_character_choosing_actions)
 		action_choosing_character_switchers_container.add_child(action_chooser_character_switchers.back())
 	
 	action_chooser_character_switchers[0].button_pressed = true
@@ -60,7 +60,7 @@ func _end_choosing() -> void:
 	_in_choosing_phase = false
 	
 	for action_chooser_character_switcher: ActionChooserSwitchCharacterButton in action_chooser_character_switchers:
-		action_chooser_character_switcher.switch_character.disconnect(action_choosing_interface.set_character)
+		action_chooser_character_switcher.switch_character.disconnect(GameRoot.get_game_root().switch_character_choosing_actions)
 		action_chooser_character_switcher.queue_free()
 	
 	action_chooser_character_switchers.clear()

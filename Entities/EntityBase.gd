@@ -3,6 +3,9 @@ extends CharacterBody2D
 class_name EntityBase
 
 
+signal entity_died(entity: EntityBase)
+
+
 class BaseMoveAction extends Action:
 	var navigation_total_time: int
 	var my_entity: EntityBase
@@ -185,8 +188,20 @@ func enable() -> void
 @abstract
 func disable() -> void
 
+func _died() -> void:
+	died()
+	if not self.entity_died.is_connected(GameRoot.get_game_root().entity_died):
+		self.entity_died.connect(GameRoot.get_game_root().entity_died)
+	entity_died.emit(self)
+
 @abstract
 func died() -> void
+
+@abstract
+func get_total_money_dropped() -> float
+
+@abstract
+func get_portrait() -> Texture2D
 
 func _ready() -> void:
 	if my_team == Enums.Team.NONE:
@@ -214,7 +229,10 @@ func _ready() -> void:
 	hurtbox_component.my_team = self.my_team
 	getting_hit_manager.health_component = self.health_component
 	getting_hit_manager.hurtbox_component = self.hurtbox_component
-	health_component.died.connect(died)
+	health_component.died.connect(_died)
+	
+	if GameRoot.get_game_root():
+		self.entity_died.connect(GameRoot.get_game_root().entity_died)
 
 @abstract
 func get_move_distance_per_frame() -> float

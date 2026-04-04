@@ -1,0 +1,24 @@
+[gd_scene load_steps=3 format=3 uid="uid://br02qe1fncgmy"]
+
+[ext_resource type="Script" uid="uid://chjigwa2rckxy" path="res://HUD/EntityStuff/HealthAndStats/OffsetHealthBarAndNameDisplay.gd" id="1_jqxew"]
+[ext_resource type="PackedScene" uid="uid://bq24ejxvh2dqa" path="res://HUD/EntityStuff/HealthAndStats/HealthBarAndNameDisplay.tscn" id="2_jqxew"]
+
+[node name="OffsetHealthBarAndNameDisplay" type="Node2D" groups=["AllHealthBars", "OnEntitiesHealthbars"]]
+script = ExtResource("1_jqxew")
+as_enemy = false
+
+[node name="Offset" type="Node2D" parent="."]
+
+[node name="HealthBarAndNameDisplay" parent="Offset" instance=ExtResource("2_jqxew")]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -160.0
+offset_top = -64.0
+offset_right = 160.0
+offset_bottom = 0.0
+grow_horizontal = 2
+grow_vertical = 0
+as_enemy = false
