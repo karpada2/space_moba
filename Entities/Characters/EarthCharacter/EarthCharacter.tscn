@@ -23,7 +23,6 @@ collision_mask = 0
 motion_mode = 1
 script = ExtResource("1_oofe1")
 move_speed_human = 200.0
-frames_after_attack = 15
 metadata/_custom_type_script = "uid://cckinmhmx0uvy"
 
 [node name="Sprite" type="Sprite2D" parent="."]

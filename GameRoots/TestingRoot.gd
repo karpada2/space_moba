@@ -52,7 +52,7 @@ func switch_character_choosing_actions(character: CharacterBase) -> void:
 	action_choosing_interface.set_character(character)
 
 func _handle_revive(character: CharacterBase) -> void:
-	character.revive(Vector2(0, -500))
+	character.revive(Vector2(0, -1 if character.my_team == Enums.Team.EVIL else 1 * 500))
 
 func action_choosing_started(team: Enums.Team) -> void:
 	if current_turn_phase._value == 0:

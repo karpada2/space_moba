@@ -59,7 +59,8 @@ func run(_frames_passed: int) -> bool:
 		target_entity.getting_hit_manager.attack(attack)
 		attacks_done += 1
 	if frames_passed_on_this_action == character_stats.frames_before_attack + character_stats.frames_after_attack:
-		frames_passed_on_this_action = 0
+		frames_passed_on_this_action = 1
 	else:
 		frames_passed_on_this_action += 1
-	return attacks_done < get_chosen_attack_amount() and frames_passed_on_this_action == 0
+	print(attacks_done, " ", get_chosen_attack_amount(), " ", frames_passed_on_this_action)
+	return attacks_done < get_chosen_attack_amount() and frames_passed_on_this_action != 0
