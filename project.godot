@@ -19,6 +19,7 @@ config/icon="res://icon.svg"
 Enums="*res://Enums.gd"
 TurnResolutionManager="*res://Turns/TurnResolutionManager.gd"
 TurnChoosingManager="*res://Turns/TurnChoosingManager.gd"
+ItemsManager="*res://Entities/Characters/Items/ItemsManager.gd"
 
 [debug]
 

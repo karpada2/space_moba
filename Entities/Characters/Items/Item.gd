@@ -7,22 +7,20 @@ class_name Item
 func get_item_priority() -> int
 
 @abstract
-func get_price() -> int
+func get_item_tier() -> ItemTier
 
-# anything that is a flat change (e.g. +100 damage)
-@abstract
-func apply_flat_on_attack(attack: Attack, is_mine: bool) -> Attack
-
-# anything that isn't a flat change
-@abstract
-func apply_percentage_on_attack(attack: Attack, is_mine: bool) -> Attack
-
-# anything that is "funky", e.g. changing damage type
-@abstract
-func apply_unique_on_attack(attack: Attack, is_mine: bool) -> Attack
+func get_price() -> int:
+	return get_item_tier().get_cost()
 
 @abstract
-func apply_flat_on_character_stats(character_stats: CharacterStats, is_mine: bool) -> CharacterStats
+func apply_on_attack(attack: Attack, is_mine: bool) -> Attack
 
 @abstract
-func apply_percent_on_character_stats(character_stats: CharacterStats, is_mine: bool) -> CharacterStats
+func apply_on_character_stats(character_stats: CharacterStats, is_mine: bool) -> CharacterStats
+
+static func get_name_of(script: GDScript) -> String:
+	if "ITEM_NAME" in script:
+		return script.ITEM_NAME
+	# Note: This version can't see the filename easily unless 
+	# the script is a global class_name
+	return script.get_global_name()

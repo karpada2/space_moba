@@ -3,7 +3,7 @@
 [ext_resource type="Texture2D" uid="uid://dc88ec5wny1rk" path="res://icon.svg" id="1_4kfho"]
 [ext_resource type="Script" uid="uid://cgkkjj6gisfb1" path="res://GameRoots/TestingRoot.gd" id="1_m46vn"]
 [ext_resource type="PackedScene" uid="uid://dd8vmp811q5j8" path="res://Terrain/Wall.tscn" id="2_8rypw"]
-[ext_resource type="Script" uid="uid://cvkg2m7nkubdx" path="res://Entities/Characters/ControllableCamera.gd" id="3_hrkw6"]
+[ext_resource type="Script" path="res://Entities/Characters/ControllableCamera.gd" id="3_hrkw6"]
 [ext_resource type="Script" uid="uid://dtd6pqcc4vcqg" path="res://HUD/Minimaps/Minimap.gd" id="4_m46vn"]
 [ext_resource type="PackedScene" uid="uid://k3mslpvijhds" path="res://Entities/Characters/EarthCharacter/EarthCharacter.tscn" id="4_so4lt"]
 [ext_resource type="PackedScene" uid="uid://dg334efubhi5i" path="res://HUD/ActionChoosing/ActionChoosingInterface.tscn" id="5_m46vn"]

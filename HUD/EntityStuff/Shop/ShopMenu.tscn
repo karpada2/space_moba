@@ -1,0 +1,62 @@
+[gd_scene load_steps=2 format=3 uid="uid://bt7bgrf54n3q6"]
+
+[ext_resource type="Script" uid="uid://xidofyplpbri" path="res://HUD/EntityStuff/Shop/ShopMenu.gd" id="1_rxmm5"]
+
+[node name="ShopMenu" type="TabContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+current_tab = 0
+script = ExtResource("1_rxmm5")
+
+[node name="Weapon" type="PanelContainer" parent="."]
+layout_mode = 2
+metadata/_tab_index = 0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Weapon"]
+layout_mode = 2
+
+[node name="BasicWeaponItemsContainer" type="HFlowContainer" parent="Weapon/VBoxContainer"]
+layout_mode = 2
+
+[node name="AdvancedWeaponItemsContainer" type="HFlowContainer" parent="Weapon/VBoxContainer"]
+layout_mode = 2
+
+[node name="MasterWeaponItemsContainer" type="HFlowContainer" parent="Weapon/VBoxContainer"]
+layout_mode = 2
+
+[node name="Vitality" type="PanelContainer" parent="."]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Vitality"]
+layout_mode = 2
+
+[node name="BasicVitalityItemsContainer" type="HFlowContainer" parent="Vitality/VBoxContainer"]
+layout_mode = 2
+
+[node name="AdvancedVitalityItemsContainer" type="HFlowContainer" parent="Vitality/VBoxContainer"]
+layout_mode = 2
+
+[node name="MasterVitalityItemsContainer" type="HFlowContainer" parent="Vitality/VBoxContainer"]
+layout_mode = 2
+
+[node name="Magic" type="PanelContainer" parent="."]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Magic"]
+layout_mode = 2
+
+[node name="BasicMagicItemsContainer" type="HFlowContainer" parent="Magic/VBoxContainer"]
+layout_mode = 2
+
+[node name="AdvancedMagicItemsContainer" type="HFlowContainer" parent="Magic/VBoxContainer"]
+layout_mode = 2
+
+[node name="MasterWeaponItemsContainer" type="HFlowContainer" parent="Magic/VBoxContainer"]
+layout_mode = 2

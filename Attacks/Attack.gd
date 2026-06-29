@@ -22,3 +22,6 @@ func _clone_inner() -> Attack:
 
 @abstract
 func get_damage(attackee: EntityBase) -> float
+
+@abstract
+func apply_number_modifier(modifier: ModifiedNumber, condition: Callable) -> void

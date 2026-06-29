@@ -32,7 +32,7 @@ var navigation_agent: NavigationAgent2D
 
 # how many pixels can be moved per turn
 @onready var move_distance_per_turn: float = (move_speed_human*(float(TurnResolutionManager.FRAMES_PER_TURN)/Engine.physics_ticks_per_second))
-@onready var character_stats: CharacterStats = CharacterStats.create(frames_before_attack, frames_after_attack, self.get_move_distance_per_frame())
+var character_stats: CharacterStats
 
 var start_pos: Vector2
 
@@ -69,6 +69,8 @@ func _ready() -> void:
 	TurnResolutionManager.resolution_started.connect(turn_resolution_start)
 	TurnResolutionManager.resolution_advance.connect(turn_resolution_advance)
 	TurnResolutionManager.resolution_ended.connect(turn_resolution_end)
+	
+	character_stats = CharacterStats.create(frames_before_attack, frames_after_attack, self.get_move_distance_per_frame(), health_component.max_health)
 
 func turn_resolution_start(_team: Enums.Team) -> void:
 	pass

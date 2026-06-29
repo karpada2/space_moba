@@ -18,3 +18,19 @@ func get_damage(attackee: EntityBase) -> float:
 	for attack: Attack in sub_attacks:
 		damage_sum += attack.get_damage(attackee)
 	return damage_sum
+
+func get_sub_attacks(deep: bool = false) -> Array[Attack]:
+	if not deep:
+		return sub_attacks
+	var return_result: Array[Attack] = []
+	for attack: Attack in sub_attacks:
+		if attack is MultipleAttack:
+			return_result.append_array(get_sub_attacks(deep))
+		elif attack is BasicAttack:
+			return_result.append(attack)
+	
+	return return_result
+
+func apply_number_modifier(modifier: ModifiedNumber) -> void:
+	for attack: Attack in sub_attacks:
+		attack.apply_number_modifier(modifier)
