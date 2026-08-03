@@ -11,12 +11,13 @@ func get_available_actions() -> Dictionary[String, ActionArray]:
 					navigation_agent
 				),
 				BaseAttackAction.create(
-					BasicAttack.create(18, Enums.DamageType.PHYSICAL, self),
-					character_stats
+					Attack.create(attack_damage, Enums.DamageType.PHYSICAL),
+					self
 				)
 			]
 		)
 	}
+
 
 func is_action_possible(action: Action, wait_before_act: int = 0) -> bool:
 	return create_wait_and_move_action(action, wait_before_act).get_action_length_frames() <= TurnResolutionManager.FRAMES_PER_TURN*action.action_length_turns

@@ -1,9 +1,10 @@
-[gd_scene load_steps=13 format=3 uid="uid://k3mslpvijhds"]
+[gd_scene format=3 uid="uid://k3mslpvijhds"]
 
 [ext_resource type="Script" uid="uid://cckinmhmx0uvy" path="res://Entities/Characters/EarthCharacter/EarthCharacter.gd" id="1_oofe1"]
 [ext_resource type="Texture2D" uid="uid://dddmxxuasemfw" path="res://Entities/Characters/EarthCharacter/EarthSprite.png" id="2_symtk"]
 [ext_resource type="Script" uid="uid://dsopyue7txr2b" path="res://Entities/Components/HealthComponent.gd" id="3_0y17a"]
 [ext_resource type="Script" uid="uid://b0xq6ymtdw1ip" path="res://Entities/Components/MoneyHandlerComponent.gd" id="3_bk6up"]
+[ext_resource type="Script" uid="uid://dab03dv1e27qt" path="res://Entities/Characters/Items/InventoryAndGUI/Inventory.gd" id="3_ttani"]
 [ext_resource type="Script" uid="uid://cmrwry3cgj18k" path="res://Entities/Components/GettingHitManagerComponent.gd" id="4_symtk"]
 [ext_resource type="Script" uid="uid://b5uttgqqjgqly" path="res://Entities/Components/HurtboxComponent.gd" id="5_h1xd8"]
 [ext_resource type="PackedScene" uid="uid://cr32u8kaclsx1" path="res://Entities/Components/TargetChooser.tscn" id="7_3nsai"]
@@ -15,7 +16,7 @@
 [sub_resource type="CircleShape2D" id="CircleShape2D_7rs7k"]
 radius = 36.0
 
-[node name="EarthCharacter" type="CharacterBody2D" groups=["Characters", "Entities"]]
+[node name="EarthCharacter" type="CharacterBody2D" unique_id=1956967546 node_paths=PackedStringArray("inventory") groups=["Characters", "Entities"]]
 light_mask = 7
 visibility_layer = 7
 collision_layer = 0
@@ -23,60 +24,67 @@ collision_mask = 0
 motion_mode = 1
 script = ExtResource("1_oofe1")
 move_speed_human = 200.0
+inventory = NodePath("Inventory")
 metadata/_custom_type_script = "uid://cckinmhmx0uvy"
 
-[node name="Sprite" type="Sprite2D" parent="."]
+[node name="Sprite" type="Sprite2D" parent="." unique_id=264054946]
 z_index = 2
 use_parent_material = true
 scale = Vector2(8.14, 8.14)
 texture = ExtResource("2_symtk")
 offset = Vector2(3, 0)
 
-[node name="MoneyHandlerComponent" type="Node" parent="."]
+[node name="Inventory" type="Node" parent="." unique_id=219325025]
+script = ExtResource("3_ttani")
+metadata/_custom_type_script = "uid://dab03dv1e27qt"
+
+[node name="MoneyHandlerComponent" type="Node" parent="." unique_id=585482264]
 script = ExtResource("3_bk6up")
 metadata/_custom_type_script = "uid://b0xq6ymtdw1ip"
 
-[node name="HealthComponent" type="Node" parent="."]
+[node name="HealthComponent" type="Node" parent="." unique_id=1086701962]
 script = ExtResource("3_0y17a")
+magical_resist = null
+physical_resist = null
 metadata/_custom_type_script = "uid://dsopyue7txr2b"
 
-[node name="GettingHitManagerComponent" type="Node" parent="."]
+[node name="GettingHitManagerComponent" type="Node" parent="." unique_id=2062662614]
 script = ExtResource("4_symtk")
 metadata/_custom_type_script = "uid://cmrwry3cgj18k"
 
-[node name="HurtboxComponent" type="Area2D" parent="."]
+[node name="HurtboxComponent" type="Area2D" parent="." unique_id=1734596943]
 collision_layer = 0
 collision_mask = 0
 script = ExtResource("5_h1xd8")
 metadata/_custom_type_script = "uid://b5uttgqqjgqly"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="HurtboxComponent"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HurtboxComponent" unique_id=1330583286]
 shape = SubResource("CircleShape2D_7rs7k")
 
-[node name="DetectionAreaComponent" parent="." instance=ExtResource("7_h1xd8")]
+[node name="DetectionAreaComponent" parent="." unique_id=1270508771 instance=ExtResource("7_h1xd8")]
 range_item_cull_mask = 4
 shadow_item_cull_mask = 4
 texture_scale = 8.6953125
 diameter = 2200
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1287500699]
 shape = SubResource("CircleShape2D_7rs7k")
 
-[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="." unique_id=831775578]
 
-[node name="TargetChooser" parent="." instance=ExtResource("7_3nsai")]
+[node name="TargetChooser" parent="." unique_id=1684660814 instance=ExtResource("7_3nsai")]
 
-[node name="TargetVisualizer" parent="." instance=ExtResource("9_5dj41")]
+[node name="TargetVisualizer" parent="." unique_id=220445884 instance=ExtResource("9_5dj41")]
 position_visualization_image = ExtResource("9_7rs7k")
 entity_visualization_image = ExtResource("9_7rs7k")
 
-[node name="RemoteTransform2D" type="RemoteTransform2D" parent="."]
+[node name="RemoteTransform2D" type="RemoteTransform2D" parent="." unique_id=1251185717]
 remote_path = NodePath("../OnPlayerGUIHolder/OffsetHealthBarAndNameDisplay")
 update_rotation = false
 
-[node name="OnPlayerGUIHolder" type="Node" parent="."]
+[node name="OnPlayerGUIHolder" type="Node" parent="." unique_id=868360291]
 
-[node name="OffsetHealthBarAndNameDisplay" parent="OnPlayerGUIHolder" node_paths=PackedStringArray("health_component") instance=ExtResource("10_7rs7k")]
+[node name="OffsetHealthBarAndNameDisplay" parent="OnPlayerGUIHolder" unique_id=1852286532 node_paths=PackedStringArray("health_component") instance=ExtResource("10_7rs7k")]
 wanted_offset = Vector2(0, -112)
 health_component = NodePath("../../HealthComponent")
 wanted_size = Vector2(400, 64)

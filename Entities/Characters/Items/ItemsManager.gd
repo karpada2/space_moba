@@ -52,5 +52,5 @@ func _scan_dir(path: String) -> void:
 
 func get_item(id: String) -> Item:
 	if item_map.map.has(id):
-		return item_map.map.get(id)
-	return item_none
+		return item_map.map.get(id).clone()
+	return item_none.clone()

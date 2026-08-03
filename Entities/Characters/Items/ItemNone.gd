@@ -1,17 +1,23 @@
 extends Item
 class_name ItemNone
 
-func get_item_priority() -> int:
-	return 0
+const ITEM_NAME: String = "None"
 
 func get_item_tier() -> ItemTier:
 	return ItemTier.BASIC
 
-func apply_on_attack(attack: Attack, _is_mine: bool) -> Attack:
-	return attack
+func get_attacked_stat_affecter(_attack: Attack, _attack_result_info: AttackResultInfo) -> StatAffecter:
+	return DummyStatAffecter.new()
 
-func apply_on_character_stats(character_stats: CharacterStats, _is_mine: bool) -> CharacterStats:
-	return character_stats
+func get_attacking_stat_affecter(_attack: Attack, _attack_result_info: AttackResultInfo) -> StatAffecter:
+	return DummyStatAffecter.new()
+
+func get_normal_stat_affecter() -> StatAffecter:
+	return DummyStatAffecter.new()
+
+func clone() -> Item:
+	return self
+
 
 func get_item_icon() -> Texture2D:
 	return preload("res://Entities/Characters/Items/ItemNone.png")

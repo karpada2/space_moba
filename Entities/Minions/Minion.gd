@@ -75,7 +75,7 @@ static func create(team: Enums.Team) -> Minion:
 @export var frames_after_attacks: int = 20
 
 @export var attack_damage: float = 20
-@onready var attack: Attack = BasicAttack.create(self.attack_damage, Enums.DamageType.PHYSICAL, self)
+@onready var attack: Attack = Attack.create(self.attack_damage, Enums.DamageType.PHYSICAL)
 
 @export var base_money: float = 30
 @export var money_growth_per_round: float = 1
@@ -89,8 +89,7 @@ static func create(team: Enums.Team) -> Minion:
 @export var minion_distance_factor: float = 0.2
 
 # how many pixels can be moved per turn
-@onready var move_distance_per_turn: float = (move_speed_human*(float(TurnResolutionManager.FRAMES_PER_TURN)/Engine.physics_ticks_per_second))
-@onready var character_stats: CharacterStats = CharacterStats.create(frames_before_attacks, frames_after_attacks, get_move_distance_per_frame())
+@onready var move_speed: float = (move_speed_human*(float(TurnResolutionManager.FRAMES_PER_TURN)/Engine.physics_ticks_per_second))
 
 var next_chosen_action: Action = null
 var ready_to_act: bool = false
@@ -146,7 +145,7 @@ func turn_resolution_start(team: Enums.Team) -> void:
 			last_target = get_enemy_to_attack()
 		
 		if last_target:
-			var temp_attack_action: BaseAttackAction = BaseAttackAction.create(attack, character_stats)
+			var temp_attack_action: BaseAttackAction = BaseAttackAction.create(attack, self)
 			temp_attack_action.fake_chosen_attack_amount = true
 			temp_attack_action.set_target_entity(last_target)
 			var move_action: EntityBase.BaseMoveAction = create_move_action(temp_attack_action)
@@ -185,10 +184,10 @@ func calculate_navigation() -> void:
 	_calculate_navigation(navigation_agent)
 
 func get_move_distance_per_frame() -> float:
-	return move_distance_per_turn/TurnResolutionManager.FRAMES_PER_TURN
+	return move_speed/TurnResolutionManager.FRAMES_PER_TURN
 
 func get_max_movement_distance_possible() -> float:
-	return move_distance_per_turn
+	return move_speed
 
 func is_movement_possible(target_pos: Vector2) -> bool:
 	navigation_agent.target_position = target_pos
@@ -216,6 +215,25 @@ func died() -> void:
 
 func get_portrait() -> Texture2D:
 	return texture
+
+func get_base_stat_value(stat_name: Enums.EntityStats) -> ModifiedNumber:
+	var result: float
+	match stat_name:
+		Enums.EntityStats.MOVE_SPEED:
+			result = move_speed
+		Enums.EntityStats.MAGICAL_RESIST:
+			result = health_component.magical_resist
+		Enums.EntityStats.PHYSICAL_RESIST:
+			result = health_component.physical_resist
+		Enums.EntityStats.BASIC_ATTACK_STARTUP_FRAMES:
+			result = frames_before_attacks
+		Enums.EntityStats.BASIC_ATTACK_ENDLAG_FRAMES:
+			result = frames_after_attacks
+		Enums.EntityStats.BASIC_ATTACK_DAMAGE:
+			result = attack_damage
+		Enums.EntityStats.MAX_HEALTH:
+			result = health_component.max_health
+	return ModifiedNumber.create(result)
 
 func create_move_action(action: Action) -> EntityBase.BaseMoveAction:
 	if action.target_entity:

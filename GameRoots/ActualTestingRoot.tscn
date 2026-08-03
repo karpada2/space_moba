@@ -1,7 +1,8 @@
 [gd_scene format=3 uid="uid://qdpimupiopkn"]
 
-[ext_resource type="Script" uid="uid://y64ruj5d0033" path="res://Entities/Characters/Items/InventoryAndGUI/Inventory.gd" id="1_5jj30"]
+[ext_resource type="Script" uid="uid://y64ruj5d0033" path="res://Entities/Characters/Items/InventoryAndGUI/InventoryShowcase.gd" id="1_5jj30"]
 [ext_resource type="Script" uid="uid://bv3me14l0tq2k" path="res://GameRoots/ActualTestingRoot.gd" id="1_w182x"]
+[ext_resource type="Script" uid="uid://dab03dv1e27qt" path="res://Entities/Characters/Items/InventoryAndGUI/Inventory.gd" id="3_87n85"]
 
 [node name="ActualTestingRoot" type="Node2D" unique_id=1537191683]
 script = ExtResource("1_w182x")
@@ -13,10 +14,15 @@ offset_right = 40.0
 offset_bottom = 40.0
 theme_override_constants/separation = 80
 
-[node name="Inventory" type="VBoxContainer" parent="CanvasLayer/VBoxContainer" unique_id=750816762]
+[node name="InventoryShowcase" type="VBoxContainer" parent="CanvasLayer/VBoxContainer" unique_id=750816762 node_paths=PackedStringArray("inventory")]
 layout_mode = 2
 script = ExtResource("1_5jj30")
+inventory = NodePath("../../../Inventory")
 metadata/_custom_type_script = "uid://y64ruj5d0033"
 
 [node name="AddItemsButtons" type="HBoxContainer" parent="CanvasLayer/VBoxContainer" unique_id=225417811]
 layout_mode = 2
+
+[node name="Inventory" type="Node" parent="." unique_id=340011725]
+script = ExtResource("3_87n85")
+metadata/_custom_type_script = "uid://dab03dv1e27qt"

@@ -2,10 +2,6 @@
 extends Resource
 class_name Item
 
-# determines in what order this item affects stuff. unique is always first, then flat, then percent; within these categories priority matters.
-@abstract
-func get_item_priority() -> int
-
 @abstract
 func get_item_tier() -> ItemTier
 
@@ -13,14 +9,27 @@ func get_price() -> int:
 	return get_item_tier().get_cost()
 
 @abstract
-func apply_on_attack(attack: Attack, is_mine: bool) -> Attack
+## what affects the entity with the item, when ATTACKING with this attack, with the corresponding result (from the other entity)
+## meant for offensive, on-hit effects (like tankbuster, mercurial magnum from deadlock)
+func get_attacking_stat_affecter(attack: Attack, attack_result_info: AttackResultInfo) -> StatAffecter
 
 @abstract
-func apply_on_character_stats(character_stats: CharacterStats, is_mine: bool) -> CharacterStats
+## what affects the entity with the item, when BEING ATTACKED by this attack, with the corresponding result (from this entity)
+## meant for defensive, on-hit effects (like berserker, spellbreaker from deadlock)
+func get_attacked_stat_affecter(attack: Attack, attack_result_info: AttackResultInfo) -> StatAffecter
+
+@abstract
+## what ALWAYS affects the entity with the item (also weird cases (if in water, at night, etc.), actives, etc.)
+func get_normal_stat_affecter() -> StatAffecter
 
 @abstract
 func get_item_icon() -> Texture2D
 
+@abstract
+func clone() -> Item
+
+func equals(another: Item) -> bool:
+	return another.get_script() == self.get_script()
 
 func bigger_than(another: Item) -> bool:
 	if self.get_item_tier().get_ordinality() != another.get_item_tier().get_ordinality():

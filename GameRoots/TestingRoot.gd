@@ -13,15 +13,20 @@ var kill_distance_contribution_buckets: CutoffBuckets = CutoffBuckets.create(
 	true
 )
 
-@onready var action_choosing_interface: ActionChoosingInterface = $PlayerSpecificHUD/VBoxContainer/ActionChoosingInterface
-@onready var action_choosing_character_switchers_container: HBoxContainer = $PlayerSpecificHUD/VBoxContainer/ActionChoosingCharacterSwitchers
+@onready var actions_and_stats: VBoxContainer = $PlayerSpecificHUD/ActionsAndStats
+@onready var action_choosing_interface: ActionChoosingInterface = $PlayerSpecificHUD/ActionsAndStats/ActionChoosingInterface
+@onready var action_choosing_character_switchers_container: HBoxContainer = $PlayerSpecificHUD/ActionsAndStats/ActionChoosingCharacterSwitchers
 @onready var minimap: Minimap = $Minimaps/Minimap
 @onready var between_players_blocker: Panel = $Blockers/BetweenPlayersBlocker
 @onready var between_players_label: Label = $Blockers/BetweenPlayersBlocker/Label
 @onready var after_resolution_blocker: Panel = $Blockers/AfterResolutionBlocker
 @onready var minions: CanvasLayer = $Minions
-@onready var current_money_showcase: CurrentMoneyShowcase = $PlayerSpecificHUD/CurrentMoneyShowcase
-@onready var in_match_stats_showcase: InMatchStatsShowcase = $PlayerSpecificHUD/VBoxContainer/InMatchStatsShowcase
+@onready var current_money_showcase: CurrentMoneyShowcase = $PlayerSpecificHUD/MoneyAndItems/MoneyAndOpenShop/CurrentMoneyShowcase
+@onready var in_match_stats_showcase: InMatchStatsShowcase = $PlayerSpecificHUD/ActionsAndStats/InMatchStatsShowcase
+@onready var inventory_showcase: InventoryShowcase = $PlayerSpecificHUD/MoneyAndItems/InventoryShowcase
+@onready var money_and_open_shop: HBoxContainer = $PlayerSpecificHUD/MoneyAndItems/MoneyAndOpenShop
+@onready var open_shop_button: Button = $PlayerSpecificHUD/MoneyAndItems/MoneyAndOpenShop/OpenShopButton
+@onready var shop_menu: ShopMenu = $PlayerSpecificHUD/MoneyAndItems/ShopMenu
 
 func _ready() -> void:
 	super()
@@ -44,12 +49,29 @@ func _ready() -> void:
 	TurnResolutionManager.resolution_advance.connect(resolution_advance)
 	TurnResolutionManager.resolution_ended.connect(resolution_ended)
 	
+	open_shop_button.pressed.connect(open_shop)
+	shop_menu.request_close_shop.connect(close_shop)
+	
+	close_shop()
+	
 	advance_turn_phase()
 
+func open_shop() -> void:
+	actions_and_stats.visible = false
+	shop_menu.enable()
+	open_shop_button.visible = false
+	minimap.visible = false
+
+func close_shop() -> void:
+	actions_and_stats.visible = true
+	shop_menu.disable()
+	open_shop_button.visible = true
+	minimap.visible = true
 
 func switch_character_choosing_actions(character: CharacterBase) -> void:
 	current_money_showcase.money_handler = character.money_handler_component
 	action_choosing_interface.set_character(character)
+	
 
 func _handle_revive(character: CharacterBase) -> void:
 	character.revive(Vector2(0, -1 if character.my_team == Enums.Team.EVIL else 1 * 500))

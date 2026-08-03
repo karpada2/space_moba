@@ -27,12 +27,13 @@ var navigation_agent: NavigationAgent2D
 
 @export var attack_range: float = 120
 
+@export var attack_damage: float = 18
+
 @export var frames_before_attack: int = 15
 @export var frames_after_attack: int = 5
 
 # how many pixels can be moved per turn
 @onready var move_distance_per_turn: float = (move_speed_human*(float(TurnResolutionManager.FRAMES_PER_TURN)/Engine.physics_ticks_per_second))
-var character_stats: CharacterStats
 
 var start_pos: Vector2
 
@@ -69,8 +70,6 @@ func _ready() -> void:
 	TurnResolutionManager.resolution_started.connect(turn_resolution_start)
 	TurnResolutionManager.resolution_advance.connect(turn_resolution_advance)
 	TurnResolutionManager.resolution_ended.connect(turn_resolution_end)
-	
-	character_stats = CharacterStats.create(frames_before_attack, frames_after_attack, self.get_move_distance_per_frame(), health_component.max_health)
 
 func turn_resolution_start(_team: Enums.Team) -> void:
 	pass
@@ -173,6 +172,25 @@ func action_choosing_advance() -> void:
 
 func _on_move_path_changed() -> void:
 	target_visualizer.set_line_points(navigation_agent.get_current_navigation_path())
+
+func get_base_stat_value(stat_name: Enums.EntityStats) -> ModifiedNumber:
+	var result: float
+	match stat_name:
+		Enums.EntityStats.MOVE_SPEED:
+			result = move_distance_per_turn
+		Enums.EntityStats.MAGICAL_RESIST:
+			result = health_component.magical_resist
+		Enums.EntityStats.PHYSICAL_RESIST:
+			result = health_component.physical_resist
+		Enums.EntityStats.BASIC_ATTACK_STARTUP_FRAMES:
+			result = frames_before_attack
+		Enums.EntityStats.BASIC_ATTACK_ENDLAG_FRAMES:
+			result = frames_after_attack
+		Enums.EntityStats.BASIC_ATTACK_DAMAGE:
+			attack_damage
+		Enums.EntityStats.MAX_HEALTH:
+			result = health_component.max_health
+	return ModifiedNumber.create(result)
 
 func died() -> void:
 	unreveal()

@@ -96,6 +96,9 @@ class NullBaseMoveAction extends BaseMoveAction:
 
 @export var my_team: Enums.Team = Enums.Team.NONE
 
+var all_stat_affecters: Array[StatAffecter] = []
+@export var inventory: Inventory
+
 var getting_hit_manager: GettingHitManagerComponent
 var health_component: HealthComponent
 var hurtbox_component: HurtboxComponent
@@ -203,6 +206,19 @@ func _ready() -> void:
 	
 	if GameRoot.get_game_root():
 		self.entity_died.connect(GameRoot.get_game_root().entity_died)
+
+@abstract
+func get_base_stat_value(stat_name: Enums.EntityStats) -> ModifiedNumber
+
+func get_stat(stat_name: Enums.EntityStats, base_stat: bool = false) -> float:
+	var base_stat_value: ModifiedNumber = get_base_stat_value(stat_name)
+	if base_stat:
+		return base_stat_value.get_total()
+	
+	for stat_affecter: StatAffecter in all_stat_affecters:
+		base_stat_value = stat_affecter.affect_stat(stat_name, base_stat_value)
+	
+	return base_stat_value.get_total()
 
 @abstract
 func get_move_distance_per_frame() -> float

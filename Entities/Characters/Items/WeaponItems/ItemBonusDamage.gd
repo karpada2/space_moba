@@ -1,26 +1,22 @@
 extends WeaponItem
 class_name ItemBonusDamage
 
-const ITEM_NAME: String = "Roided Up Arms"
-
-func get_item_priority() -> int:
-	return 2
+const ITEM_NAME: String = "'Roided Up Arms"
 
 func get_item_tier() -> ItemTier:
 	return ItemTier.BASIC
 
-func apply_on_attack(attack: Attack, is_mine: bool) -> Attack:
-	if is_mine:
-		var condition: Callable = func(attack_in: Attack) -> bool:
-			if attack_in is BasicAttack:
-				if attack_in._damage_type == Enums.DamageType.PHYSICAL:
-					return true
-			return false
-		attack.apply_number_modifier(ModifiedNumber.create(0, 10), condition)
-	return attack
+func get_attacked_stat_affecter(_attack: Attack, _attack_result_info: AttackResultInfo) -> StatAffecter:
+	return DummyStatAffecter.new()
 
-func apply_on_character_stats(character_stats: CharacterStats, _is_mine: bool) -> CharacterStats:
-	return character_stats
+func get_attacking_stat_affecter(_attack: Attack, _attack_result_info: AttackResultInfo) -> StatAffecter:
+	return DummyStatAffecter.new()
+
+func get_normal_stat_affecter() -> StatAffecter:
+	return SimpleStatAffecter.create(Enums.EntityStats.BASIC_ATTACK_DAMAGE, NumberModifier.create(15))
+
+func clone() -> Item:
+	return self
 
 func get_item_icon() -> Texture2D:
 	return preload("res://Entities/Characters/Items/WeaponItems/BonusDamage.png")

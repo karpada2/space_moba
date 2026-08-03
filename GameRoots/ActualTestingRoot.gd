@@ -1,7 +1,10 @@
 extends Node2D
 
 @onready var add_items_buttons: HBoxContainer = $CanvasLayer/VBoxContainer/AddItemsButtons
-@onready var inventory: Inventory = $CanvasLayer/VBoxContainer/Inventory
+@onready var inventory_showcase: InventoryShowcase = $CanvasLayer/VBoxContainer/InventoryShowcase
+
+@onready var inventory: Inventory = $Inventory
+
 
 func _ready() -> void:
 	var curr_item_in_inventory: ItemInInventory

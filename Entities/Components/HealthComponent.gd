@@ -31,6 +31,9 @@ var is_alive: bool = true
 				health_changed.emit(curr_health, max_health)
 				revived.emit()
 
+@export var magical_resist: float = 0
+@export var physical_resist: float = 0
+
 func deal_damage(amount: float) -> void:
 	curr_health -= amount
 

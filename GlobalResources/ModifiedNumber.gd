@@ -2,32 +2,21 @@ extends Resource
 class_name ModifiedNumber
 
 var base: float
-var addition: float
-var multiplier: float
+var number_modifiers: Array[NumberModifier]
 
-static func create(base_in: float, addition_in: float = 0, multiplier_in: float = 1) -> ModifiedNumber:
-	var new_modified_number: ModifiedNumber = ModifiedNumber.new()
-	
-	new_modified_number.base = base_in
-	new_modified_number.addition = addition_in
-	new_modified_number.multiplier = multiplier_in
-	
-	return new_modified_number
+static func create(base_in: float, number_modifiers_in: Array[NumberModifier] = []) -> ModifiedNumber:
+	var temp: ModifiedNumber = ModifiedNumber.new()
+	temp.base = base_in
+	temp.number_modifiers = number_modifiers_in
+	return temp
 
-func clone() -> ModifiedNumber:
-	return ModifiedNumber.create(self.base, self.addition, self.multiplier)
-
-func add_bonus(bonus: float) -> ModifiedNumber:
-	self.addition += bonus
-	return self
-
-# adds (added_multiplier - 1) to the multiplier, unless remove_one is false in which case just adds added_multiplier
-func add_multiplier(added_multiplier: float, remove_one: bool = false) -> ModifiedNumber:
-	self.multiplier += added_multiplier if not remove_one else (added_multiplier - 1)
+func add_modifier(modifier: NumberModifier) -> ModifiedNumber:
+	number_modifiers.append(modifier)
 	return self
 
 func get_total() -> float:
-	if multiplier <= 0:
-		return 0
+	var total_modifier: NumberModifier = NumberModifier.create()
+	for modifier: NumberModifier in number_modifiers:
+		total_modifier = total_modifier.add_modifier(modifier)
 	
-	return (base + addition)*multiplier
+	return total_modifier.get_total(base)

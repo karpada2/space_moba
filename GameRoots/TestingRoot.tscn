@@ -1,48 +1,22 @@
-[gd_scene load_steps=21 format=3 uid="uid://b5w3iujlul5bw"]
+[gd_scene format=3 uid="uid://b5w3iujlul5bw"]
 
 [ext_resource type="Texture2D" uid="uid://dc88ec5wny1rk" path="res://icon.svg" id="1_4kfho"]
 [ext_resource type="Script" uid="uid://cgkkjj6gisfb1" path="res://GameRoots/TestingRoot.gd" id="1_m46vn"]
 [ext_resource type="PackedScene" uid="uid://dd8vmp811q5j8" path="res://Terrain/Wall.tscn" id="2_8rypw"]
-[ext_resource type="Script" path="res://Entities/Characters/ControllableCamera.gd" id="3_hrkw6"]
+[ext_resource type="Script" uid="uid://cvkg2m7nkubdx" path="res://Entities/Characters/ControllableCamera.gd" id="3_hrkw6"]
 [ext_resource type="Script" uid="uid://dtd6pqcc4vcqg" path="res://HUD/Minimaps/Minimap.gd" id="4_m46vn"]
 [ext_resource type="PackedScene" uid="uid://k3mslpvijhds" path="res://Entities/Characters/EarthCharacter/EarthCharacter.tscn" id="4_so4lt"]
 [ext_resource type="PackedScene" uid="uid://dg334efubhi5i" path="res://HUD/ActionChoosing/ActionChoosingInterface.tscn" id="5_m46vn"]
 [ext_resource type="PackedScene" uid="uid://ccbm682xyrcmy" path="res://HUD/EntityStuff/Teams/InMatchStatsShowcase.tscn" id="7_gondq"]
 [ext_resource type="PackedScene" uid="uid://ddl8uslynjduy" path="res://HUD/EntityStuff/Money/CurrentMoneyShowcase.tscn" id="8_qjowt"]
+[ext_resource type="Script" uid="uid://y64ruj5d0033" path="res://Entities/Characters/Items/InventoryAndGUI/InventoryShowcase.gd" id="10_12iin"]
+[ext_resource type="PackedScene" uid="uid://bt7bgrf54n3q6" path="res://HUD/EntityStuff/Shop/ShopMenu.tscn" id="11_uumw7"]
 
 [sub_resource type="NavigationPolygon" id="NavigationPolygon_m46vn"]
 vertices = PackedVector2Array(1339.2422, 1244.2891, -1311.5313, 1259.7031, -87.82031, 243.07031, 21.21875, 157.1875, -291.57813, 267.77344, 136.96094, -26.617188, 1300.7578, -1291.6797, -1288.4375, -1275.3125, -319.7578, -8.96875, 24.132813, -73.078125, -284.64844, -123.890625, -141.85938, -13.28125, -101.796875, 6.5625, -38.992188, 152.5)
 polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3), PackedInt32Array(4, 2, 1), PackedInt32Array(5, 6, 0, 3), PackedInt32Array(4, 1, 7, 8), PackedInt32Array(7, 6, 5, 9), PackedInt32Array(10, 8, 7), PackedInt32Array(11, 10, 7, 9, 12), PackedInt32Array(2, 11, 12, 13), PackedInt32Array(2, 13, 3)])
 outlines = Array[PackedVector2Array]([PackedVector2Array(-1338, -1325, 1350, -1342, 1390, 1294, -1362, 1310)])
 agent_radius = 50.0
-
-[sub_resource type="Shader" id="Shader_gondq"]
-resource_local_to_scene = true
-code = "shader_type canvas_item;
-const vec4 tint = vec4(1, 0, 0, 1);
-uniform float mix_amount : hint_range(0, 1) = 0.5;
-
-void vertex() {
-	// Called for every vertex the material is visible on.
-}
-
-void fragment() {
-    vec4 tex = texture(TEXTURE, UV);
-	if (tex.a != 0.0){
-		COLOR = mix(tex, tint, mix_amount);
-	}
-}
-
-//void light() {
-//	// Called for every pixel for every light affecting the CanvasItem.
-//	// Uncomment to replace the default light processing function with this one.
-//}
-"
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_12iin"]
-resource_local_to_scene = true
-shader = SubResource("Shader_gondq")
-shader_parameter/mix_amount = 0.0
 
 [sub_resource type="Shader" id="Shader_uumw7"]
 resource_local_to_scene = true
@@ -128,103 +102,131 @@ resource_local_to_scene = true
 shader = SubResource("Shader_tb8g6")
 shader_parameter/mix_amount = 0.0
 
+[sub_resource type="Shader" id="Shader_fpi4c"]
+resource_local_to_scene = true
+code = "shader_type canvas_item;
+const vec4 tint = vec4(1, 0, 0, 1);
+uniform float mix_amount : hint_range(0, 1) = 0.5;
+
+void vertex() {
+	// Called for every vertex the material is visible on.
+}
+
+void fragment() {
+    vec4 tex = texture(TEXTURE, UV);
+	if (tex.a != 0.0){
+		COLOR = mix(tex, tint, mix_amount);
+	}
+}
+
+//void light() {
+//	// Called for every pixel for every light affecting the CanvasItem.
+//	// Uncomment to replace the default light processing function with this one.
+//}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_xcywt"]
+resource_local_to_scene = true
+shader = SubResource("Shader_fpi4c")
+shader_parameter/mix_amount = 0.0
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hrkw6"]
 bg_color = Color(0.099985994, 0.09998601, 0.099985965, 1)
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_gondq"]
 
-[node name="TestingRoot" type="Node2D"]
+[node name="TestingRoot" type="Node2D" unique_id=1562245094]
 light_mask = 7
 visibility_layer = 7
 script = ExtResource("1_m46vn")
 
-[node name="WorldLayer" type="CanvasLayer" parent="."]
+[node name="WorldLayer" type="CanvasLayer" parent="." unique_id=1649654987]
 layer = -1
 follow_viewport_enabled = true
 
-[node name="CanvasModulate" type="CanvasModulate" parent="WorldLayer"]
+[node name="CanvasModulate" type="CanvasModulate" parent="WorldLayer" unique_id=421807374]
 color = Color(0.5251013, 0.52510136, 0.52510107, 1)
 
-[node name="Sprite2D" type="Sprite2D" parent="WorldLayer"]
+[node name="Sprite2D" type="Sprite2D" parent="WorldLayer" unique_id=717323482]
 light_mask = 4
 visibility_layer = 4
 scale = Vector2(19.49, 19.49)
 texture = ExtResource("1_4kfho")
 
-[node name="NavigationRegion2D" type="NavigationRegion2D" parent="WorldLayer"]
+[node name="NavigationRegion2D" type="NavigationRegion2D" parent="WorldLayer" unique_id=1076074679]
 navigation_polygon = SubResource("NavigationPolygon_m46vn")
 
-[node name="Wall" parent="WorldLayer/NavigationRegion2D" instance=ExtResource("2_8rypw")]
+[node name="Wall" parent="WorldLayer/NavigationRegion2D" unique_id=888666614 instance=ExtResource("2_8rypw")]
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="WorldLayer/NavigationRegion2D/Wall"]
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="WorldLayer/NavigationRegion2D/Wall" unique_id=1846816181]
 polygon = PackedVector2Array(29, -17, 63, -3, -5, 105, -39, 26)
 
-[node name="Polygon2D" type="Polygon2D" parent="WorldLayer/NavigationRegion2D/Wall"]
+[node name="Polygon2D" type="Polygon2D" parent="WorldLayer/NavigationRegion2D/Wall" unique_id=1994540685]
 light_mask = 4
 visibility_layer = 4
 color = Color(1, 0, 0, 1)
 polygon = PackedVector2Array(29, -17, 63, -3, -5, 105, -39, 26)
 
-[node name="Wall2" parent="WorldLayer/NavigationRegion2D" instance=ExtResource("2_8rypw")]
+[node name="Wall2" parent="WorldLayer/NavigationRegion2D" unique_id=1558050013 instance=ExtResource("2_8rypw")]
 position = Vector2(-208, 56)
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="WorldLayer/NavigationRegion2D/Wall2"]
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="WorldLayer/NavigationRegion2D/Wall2" unique_id=1319175030]
 polygon = PackedVector2Array(-50, -96, 21, -41, 60, 144, -39, 156, -61, -60)
 
-[node name="Polygon2D" type="Polygon2D" parent="WorldLayer/NavigationRegion2D/Wall2"]
+[node name="Polygon2D" type="Polygon2D" parent="WorldLayer/NavigationRegion2D/Wall2" unique_id=1494934055]
 light_mask = 4
 visibility_layer = 4
 color = Color(1, 0, 0, 1)
 polygon = PackedVector2Array(-50, -96, 21, -41, 60, 144, -39, 156, -61, -60)
 
-[node name="Characters" type="CanvasLayer" parent="."]
+[node name="Characters" type="CanvasLayer" parent="." unique_id=1714134356]
 layer = 0
 follow_viewport_enabled = true
 
-[node name="EarthCharacter" parent="Characters" groups=["VisibleEntities"] instance=ExtResource("4_so4lt")]
-material = SubResource("ShaderMaterial_12iin")
+[node name="EarthCharacter" parent="Characters" unique_id=348916371 groups=["VisibleEntities"] instance=ExtResource("4_so4lt")]
+material = SubResource("ShaderMaterial_gp5ni")
 position = Vector2(-341, 994)
 my_team = 1
 
-[node name="EarthCharacter2" parent="Characters" groups=["VisibleEntities"] instance=ExtResource("4_so4lt")]
-material = SubResource("ShaderMaterial_gp5ni")
+[node name="EarthCharacter2" parent="Characters" unique_id=1329956696 groups=["VisibleEntities"] instance=ExtResource("4_so4lt")]
+material = SubResource("ShaderMaterial_h4lio")
 position = Vector2(-324, -1067)
 my_team = 2
 
-[node name="EarthCharacter3" parent="Characters" groups=["VisibleEntities"] instance=ExtResource("4_so4lt")]
-material = SubResource("ShaderMaterial_h4lio")
+[node name="EarthCharacter3" parent="Characters" unique_id=1252208691 groups=["VisibleEntities"] instance=ExtResource("4_so4lt")]
+material = SubResource("ShaderMaterial_r2peq")
 position = Vector2(341, 994)
 my_team = 1
 
-[node name="EarthCharacter4" parent="Characters" groups=["VisibleEntities"] instance=ExtResource("4_so4lt")]
-material = SubResource("ShaderMaterial_r2peq")
+[node name="EarthCharacter4" parent="Characters" unique_id=2054717015 groups=["VisibleEntities"] instance=ExtResource("4_so4lt")]
+material = SubResource("ShaderMaterial_xcywt")
 position = Vector2(314, -1079)
 my_team = 2
 
-[node name="ControllableCamera" type="Camera2D" parent="."]
+[node name="ControllableCamera" type="Camera2D" parent="." unique_id=439154910]
 zoom = Vector2(0.25, 0.25)
 script = ExtResource("3_hrkw6")
 
-[node name="Minions" type="CanvasLayer" parent="."]
+[node name="Minions" type="CanvasLayer" parent="." unique_id=621220571]
 layer = 0
 follow_viewport_enabled = true
 
-[node name="BaseMarkers" type="CanvasLayer" parent="."]
+[node name="BaseMarkers" type="CanvasLayer" parent="." unique_id=1216025000]
 layer = -1
 follow_viewport_enabled = true
 
-[node name="EvilBase" type="Sprite2D" parent="BaseMarkers"]
+[node name="EvilBase" type="Sprite2D" parent="BaseMarkers" unique_id=65509129]
 modulate = Color(1, 0, 1, 1)
 position = Vector2(0, -1000)
 texture = ExtResource("1_4kfho")
 
-[node name="GoodBase" type="Sprite2D" parent="BaseMarkers"]
+[node name="GoodBase" type="Sprite2D" parent="BaseMarkers" unique_id=1380907847]
 position = Vector2(0, 1000)
 texture = ExtResource("1_4kfho")
 
-[node name="Minimaps" type="CanvasLayer" parent="."]
+[node name="Minimaps" type="CanvasLayer" parent="." unique_id=1548963358]
 
-[node name="Minimap" type="TextureRect" parent="Minimaps"]
+[node name="Minimap" type="TextureRect" parent="Minimaps" unique_id=737243852]
 anchors_preset = 3
 anchor_left = 1.0
 anchor_top = 1.0
@@ -242,30 +244,58 @@ mini_map_binding_box = Vector2(128, 128)
 my_team = 1
 metadata/_custom_type_script = "uid://dtd6pqcc4vcqg"
 
-[node name="PlayerSpecificHUD" type="CanvasLayer" parent="."]
+[node name="PlayerSpecificHUD" type="CanvasLayer" parent="." unique_id=2021943608]
 
-[node name="VBoxContainer" type="VBoxContainer" parent="PlayerSpecificHUD"]
+[node name="ActionsAndStats" type="VBoxContainer" parent="PlayerSpecificHUD" unique_id=173920857]
 offset_right = 1280.0
 offset_bottom = 204.0
 scale = Vector2(0.5, 0.5)
 
-[node name="InMatchStatsShowcase" parent="PlayerSpecificHUD/VBoxContainer" instance=ExtResource("7_gondq")]
+[node name="InMatchStatsShowcase" parent="PlayerSpecificHUD/ActionsAndStats" unique_id=384474828 instance=ExtResource("7_gondq")]
 layout_mode = 2
 
-[node name="ActionChoosingCharacterSwitchers" type="HBoxContainer" parent="PlayerSpecificHUD/VBoxContainer"]
+[node name="ActionChoosingCharacterSwitchers" type="HBoxContainer" parent="PlayerSpecificHUD/ActionsAndStats" unique_id=1083988296]
 layout_mode = 2
 
-[node name="ActionChoosingInterface" parent="PlayerSpecificHUD/VBoxContainer" instance=ExtResource("5_m46vn")]
+[node name="ActionChoosingInterface" parent="PlayerSpecificHUD/ActionsAndStats" unique_id=1789835816 instance=ExtResource("5_m46vn")]
 layout_mode = 2
 
-[node name="CurrentMoneyShowcase" parent="PlayerSpecificHUD" instance=ExtResource("8_qjowt")]
-offset_top = -50.0
-offset_right = 100.0
+[node name="MoneyAndItems" type="VBoxContainer" parent="PlayerSpecificHUD" unique_id=1369858255]
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -360.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_behavior_recursive = 1
+alignment = 2
 
-[node name="Blockers" type="CanvasLayer" parent="."]
+[node name="ShopMenu" parent="PlayerSpecificHUD/MoneyAndItems" unique_id=515651701 instance=ExtResource("11_uumw7")]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="MoneyAndOpenShop" type="HBoxContainer" parent="PlayerSpecificHUD/MoneyAndItems" unique_id=953454390]
+layout_mode = 2
+mouse_behavior_recursive = 2
+
+[node name="CurrentMoneyShowcase" parent="PlayerSpecificHUD/MoneyAndItems/MoneyAndOpenShop" unique_id=1885632768 instance=ExtResource("8_qjowt")]
+layout_mode = 2
+
+[node name="OpenShopButton" type="Button" parent="PlayerSpecificHUD/MoneyAndItems/MoneyAndOpenShop" unique_id=516267583]
+layout_mode = 2
+text = "Open Shop"
+
+[node name="InventoryShowcase" type="VBoxContainer" parent="PlayerSpecificHUD/MoneyAndItems" unique_id=705748026]
+layout_mode = 2
+mouse_behavior_recursive = 2
+script = ExtResource("10_12iin")
+metadata/_custom_type_script = "uid://y64ruj5d0033"
+
+[node name="Blockers" type="CanvasLayer" parent="." unique_id=624201669]
 layer = 2
 
-[node name="BetweenPlayersBlocker" type="Panel" parent="Blockers"]
+[node name="BetweenPlayersBlocker" type="Panel" parent="Blockers" unique_id=291150525]
 visible = false
 anchors_preset = 15
 anchor_right = 1.0
@@ -274,7 +304,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_hrkw6")
 
-[node name="Label" type="Label" parent="Blockers/BetweenPlayersBlocker"]
+[node name="Label" type="Label" parent="Blockers/BetweenPlayersBlocker" unique_id=1177077839]
 layout_mode = 1
 anchors_preset = 14
 anchor_top = 0.5
@@ -290,7 +320,7 @@ PRESS ANY BUTTON TO CONTINUE"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="AfterResolutionBlocker" type="Panel" parent="Blockers"]
+[node name="AfterResolutionBlocker" type="Panel" parent="Blockers" unique_id=228100011]
 visible = false
 anchors_preset = 15
 anchor_right = 1.0

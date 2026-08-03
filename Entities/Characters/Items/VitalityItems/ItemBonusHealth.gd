@@ -3,19 +3,20 @@ class_name ItemBonusHealth
 
 const ITEM_NAME: String = "More Mass"
 
-func get_item_priority() -> int:
-	return 2
-
 func get_item_tier() -> ItemTier:
 	return ItemTier.BASIC
 
-func apply_on_attack(attack: Attack, _is_mine: bool) -> Attack:
-	return attack
+func get_attacked_stat_affecter(_attack: Attack, _attack_result_info: AttackResultInfo) -> StatAffecter:
+	return DummyStatAffecter.new()
 
-func apply_on_character_stats(character_stats: CharacterStats, is_mine: bool) -> CharacterStats:
-	if is_mine:
-		character_stats.max_health.add_bonus(100)
-	return character_stats
+func get_attacking_stat_affecter(_attack: Attack, _attack_result_info: AttackResultInfo) -> StatAffecter:
+	return DummyStatAffecter.new()
+
+func get_normal_stat_affecter() -> StatAffecter:
+	return SimpleStatAffecter.create(Enums.EntityStats.MAX_HEALTH, NumberModifier.create(100))
+
+func clone() -> Item:
+	return self
 
 func get_item_icon() -> Texture2D:
 	return preload("res://Entities/Characters/Items/VitalityItems/BonusHealth.png")
