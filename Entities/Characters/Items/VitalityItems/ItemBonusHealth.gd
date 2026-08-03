@@ -16,3 +16,6 @@ func apply_on_character_stats(character_stats: CharacterStats, is_mine: bool) ->
 	if is_mine:
 		character_stats.max_health.add_bonus(100)
 	return character_stats
+
+func get_item_icon() -> Texture2D:
+	return preload("res://Entities/Characters/Items/VitalityItems/BonusHealth.png")
